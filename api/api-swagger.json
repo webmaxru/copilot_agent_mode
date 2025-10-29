@@ -1,9 +1,17 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Express API with Swagger",
+        "title": "OctoCAT Supply Chain Management API",
         "version": "1.0.0",
-        "description": "REST API documentation using Swagger/OpenAPI"
+        "description": "REST API for the OctoCAT Supply Chain Management System. This API provides comprehensive endpoints for managing suppliers, products, orders, deliveries, and organizational structures including headquarters and branches.\n\n## Features\n\n- **Complete CRUD Operations** - Create, Read, Update, Delete for all entities\n- **Relational Data** - Properly linked entities with foreign key relationships\n- **Type Safety** - Strong TypeScript typing throughout\n- **Error Handling** - Consistent error responses with appropriate HTTP status codes\n- **SQLite Backend** - Lightweight, file-based database with full ACID compliance\n\n## Error Handling\n\nAll endpoints follow a consistent error response format:\n\n```json\n{\n  \"error\": {\n    \"code\": \"ERROR_CODE\",\n    \"message\": \"Human-readable error message\"\n  }\n}\n```\n\n### Error Codes\n\n- `NOT_FOUND` (404) - Requested resource does not exist\n- `VALIDATION_ERROR` (400) - Invalid input data\n- `CONFLICT` (409) - Resource conflict (e.g., duplicate entry)\n- `DATABASE_ERROR` (500) - Internal database error\n\n## Data Model\n\nThe API manages the following core entities:\n\n- **Suppliers** - Provide products to the supply chain\n- **Products** - Items available for order\n- **Headquarters** - Main company locations\n- **Branches** - Regional offices linked to headquarters\n- **Orders** - Purchase orders from branches\n- **Order Details** - Line items within orders\n- **Deliveries** - Shipments from suppliers\n- **Order Detail Deliveries** - Links between orders and deliveries\n\n## Getting Started\n\n1. Start the API server: `npm run dev --workspace=api`\n2. Access this documentation at: `http://localhost:3000/api-docs`\n3. Try the endpoints using the \"Try it out\" feature\n\nFor more information, see the [API Documentation](https://github.com/webmaxru/copilot_agent_mode/tree/main/docs) in the repository.",
+        "contact": {
+            "name": "API Support",
+            "url": "https://github.com/webmaxru/copilot_agent_mode"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
     },
     "servers": [
         {
@@ -1079,6 +1087,7 @@
         "/api/suppliers": {
             "get": {
                 "summary": "Returns all suppliers",
+                "description": "Retrieves a list of all suppliers in the system. Suppliers provide products to the supply chain.",
                 "tags": [
                     "Suppliers"
                 ],
@@ -1092,6 +1101,34 @@
                                     "items": {
                                         "$ref": "#/components/schemas/Supplier"
                                     }
+                                },
+                                "example": [
+                                    {
+                                        "supplierId": 1,
+                                        "name": "Tech Supplies Inc.",
+                                        "description": "Technology and electronics supplier",
+                                        "contactPerson": "John Smith",
+                                        "email": "john@techsupplies.com",
+                                        "phone": "555-0101"
+                                    },
+                                    {
+                                        "supplierId": 2,
+                                        "name": "Office Essentials",
+                                        "description": "Office supplies and furniture",
+                                        "contactPerson": "Jane Doe",
+                                        "email": "jane@officeessentials.com",
+                                        "phone": "555-0102"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
                                 }
                             }
                         }
@@ -1100,15 +1137,53 @@
             },
             "post": {
                 "summary": "Create a new supplier",
+                "description": "Creates a new supplier in the system. The supplier ID will be automatically generated.",
                 "tags": [
                     "Suppliers"
                 ],
                 "requestBody": {
                     "required": true,
+                    "description": "Supplier object to create. The supplierId field should not be included as it will be auto-generated.",
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Supplier"
+                                "type": "object",
+                                "required": ["name"],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "Supplier name",
+                                        "example": "Global Tech Supplies"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "description": "Description of the supplier",
+                                        "example": "Leading provider of technology components"
+                                    },
+                                    "contactPerson": {
+                                        "type": "string",
+                                        "description": "Primary contact person",
+                                        "example": "Alice Johnson"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "description": "Contact email",
+                                        "example": "alice@globaltech.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "description": "Contact phone number",
+                                        "example": "555-0199"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "name": "Global Tech Supplies",
+                                "description": "Leading provider of technology components",
+                                "contactPerson": "Alice Johnson",
+                                "email": "alice@globaltech.com",
+                                "phone": "555-0199"
                             }
                         }
                     }
@@ -1120,6 +1195,40 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Supplier"
+                                },
+                                "example": {
+                                    "supplierId": 10,
+                                    "name": "Global Tech Supplies",
+                                    "description": "Leading provider of technology components",
+                                    "contactPerson": "Alice Johnson",
+                                    "email": "alice@globaltech.com",
+                                    "phone": "555-0199"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error - invalid input data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "VALIDATION_ERROR",
+                                        "message": "Validation error: Name is required"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict - supplier already exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ConflictError"
                                 }
                             }
                         }
@@ -1130,6 +1239,7 @@
         "/api/suppliers/{id}": {
             "get": {
                 "summary": "Get a supplier by ID",
+                "description": "Retrieves detailed information about a specific supplier by their unique identifier.",
                 "tags": [
                     "Suppliers"
                 ],
@@ -1139,9 +1249,11 @@
                         "name": "id",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "minimum": 1
                         },
-                        "description": "Supplier ID"
+                        "description": "Unique supplier identifier",
+                        "example": 1
                     }
                 ],
                 "responses": {
@@ -1151,17 +1263,39 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Supplier"
+                                },
+                                "example": {
+                                    "supplierId": 1,
+                                    "name": "Tech Supplies Inc.",
+                                    "description": "Technology and electronics supplier",
+                                    "contactPerson": "John Smith",
+                                    "email": "john@techsupplies.com",
+                                    "phone": "555-0101"
                                 }
                             }
                         }
                     },
                     "404": {
-                        "description": "Supplier not found"
+                        "description": "Supplier not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "NOT_FOUND",
+                                        "message": "Supplier with ID 999 not found"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             },
             "put": {
                 "summary": "Update a supplier",
+                "description": "Updates an existing supplier's information. Only provided fields will be updated (partial update supported).",
                 "tags": [
                     "Suppliers"
                 ],
@@ -1171,17 +1305,42 @@
                         "name": "id",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "minimum": 1
                         },
-                        "description": "Supplier ID"
+                        "description": "Unique supplier identifier",
+                        "example": 1
                     }
                 ],
                 "requestBody": {
                     "required": true,
+                    "description": "Supplier fields to update. Only include fields you want to change.",
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Supplier"
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "contactPerson": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "phone": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "contactPerson": "Bob Wilson",
+                                "email": "bob@techsupplies.com"
                             }
                         }
                     }
@@ -1193,17 +1352,43 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Supplier"
+                                },
+                                "example": {
+                                    "supplierId": 1,
+                                    "name": "Tech Supplies Inc.",
+                                    "description": "Technology and electronics supplier",
+                                    "contactPerson": "Bob Wilson",
+                                    "email": "bob@techsupplies.com",
+                                    "phone": "555-0101"
                                 }
                             }
                         }
                     },
                     "404": {
-                        "description": "Supplier not found"
+                        "description": "Supplier not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
                     }
                 }
             },
             "delete": {
                 "summary": "Delete a supplier",
+                "description": "Deletes a supplier from the system. Note: This will also delete all products associated with this supplier (CASCADE delete).",
                 "tags": [
                     "Suppliers"
                 ],
@@ -1213,17 +1398,32 @@
                         "name": "id",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "minimum": 1
                         },
-                        "description": "Supplier ID"
+                        "description": "Unique supplier identifier",
+                        "example": 1
                     }
                 ],
                 "responses": {
                     "204": {
-                        "description": "Supplier deleted successfully"
+                        "description": "Supplier deleted successfully (no content returned)"
                     },
                     "404": {
-                        "description": "Supplier not found"
+                        "description": "Supplier not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "error": {
+                                        "code": "NOT_FOUND",
+                                        "message": "Supplier with ID 999 not found"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1458,29 +1658,64 @@
                 "properties": {
                     "productId": {
                         "type": "integer",
-                        "description": "The unique identifier for the product"
+                        "description": "The unique identifier for the product",
+                        "example": 101
                     },
                     "name": {
                         "type": "string",
-                        "description": "The name of the product"
+                        "description": "The name of the product",
+                        "example": "Wireless Mouse"
                     },
                     "description": {
                         "type": "string",
-                        "description": "Detailed description of the product"
+                        "description": "Detailed description of the product",
+                        "example": "Ergonomic wireless mouse with 2.4GHz connectivity and 18-month battery life"
                     },
                     "price": {
                         "type": "number",
                         "format": "float",
-                        "description": "The current price of the product"
+                        "description": "The current price of the product",
+                        "example": 29.99
                     },
                     "supplierId": {
                         "type": "integer",
-                        "description": "The ID of the supplier providing this product"
+                        "description": "The ID of the supplier providing this product",
+                        "example": 1
                     },
-                    "stockLevel": {
-                        "type": "integer",
-                        "description": "Current stock level of the product"
+                    "sku": {
+                        "type": "string",
+                        "description": "Stock Keeping Unit - unique product code",
+                        "example": "WM-2400-BLK"
+                    },
+                    "unit": {
+                        "type": "string",
+                        "description": "Unit of measure for the product",
+                        "example": "piece"
+                    },
+                    "imgName": {
+                        "type": "string",
+                        "description": "Product image filename",
+                        "example": "wireless-mouse.jpg"
+                    },
+                    "discount": {
+                        "type": "number",
+                        "format": "float",
+                        "description": "Discount percentage (0.0 to 1.0)",
+                        "example": 0.15,
+                        "minimum": 0,
+                        "maximum": 1
                     }
+                },
+                "example": {
+                    "productId": 101,
+                    "supplierId": 1,
+                    "name": "Wireless Mouse",
+                    "description": "Ergonomic wireless mouse with 2.4GHz connectivity",
+                    "price": 29.99,
+                    "sku": "WM-2400-BLK",
+                    "unit": "piece",
+                    "imgName": "wireless-mouse.jpg",
+                    "discount": 0.15
                 }
             },
             "Supplier": {
@@ -1492,32 +1727,113 @@
                 "properties": {
                     "supplierId": {
                         "type": "integer",
-                        "description": "The unique identifier for the supplier"
+                        "description": "The unique identifier for the supplier",
+                        "example": 1
                     },
                     "name": {
                         "type": "string",
-                        "description": "The name of the supplier"
+                        "description": "The name of the supplier",
+                        "example": "Tech Supplies Inc."
                     },
                     "address": {
                         "type": "string",
-                        "description": "The physical address of the supplier"
+                        "description": "The physical address of the supplier",
+                        "example": "123 Tech Street, Silicon Valley, CA 94025"
                     },
                     "contactPerson": {
                         "type": "string",
-                        "description": "Name of the primary contact person"
+                        "description": "Name of the primary contact person",
+                        "example": "John Smith"
                     },
                     "email": {
                         "type": "string",
                         "format": "email",
-                        "description": "Contact email for the supplier"
+                        "description": "Contact email for the supplier",
+                        "example": "john@techsupplies.com"
                     },
                     "phone": {
                         "type": "string",
-                        "description": "Contact phone number for the supplier"
+                        "description": "Contact phone number for the supplier",
+                        "example": "555-0101"
                     },
                     "description": {
                         "type": "string",
-                        "description": "Additional details about the supplier"
+                        "description": "Additional details about the supplier",
+                        "example": "Leading technology and electronics supplier with 20+ years of experience"
+                    }
+                },
+                "example": {
+                    "supplierId": 1,
+                    "name": "Tech Supplies Inc.",
+                    "description": "Leading technology and electronics supplier",
+                    "contactPerson": "John Smith",
+                    "email": "john@techsupplies.com",
+                    "phone": "555-0101"
+                }
+            },
+            "Error": {
+                "type": "object",
+                "required": ["error"],
+                "properties": {
+                    "error": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                            "code": {
+                                "type": "string",
+                                "description": "Error code identifying the type of error",
+                                "example": "NOT_FOUND"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "Human-readable error message",
+                                "example": "Supplier with ID 123 not found"
+                            }
+                        }
+                    }
+                }
+            },
+            "ValidationError": {
+                "type": "object",
+                "required": ["error"],
+                "properties": {
+                    "error": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                            "code": {
+                                "type": "string",
+                                "description": "Error code",
+                                "example": "VALIDATION_ERROR"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "Validation error message",
+                                "example": "Validation error: Invalid email format"
+                            }
+                        }
+                    }
+                }
+            },
+            "ConflictError": {
+                "type": "object",
+                "required": ["error"],
+                "properties": {
+                    "error": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                            "code": {
+                                "type": "string",
+                                "description": "Error code",
+                                "example": "CONFLICT"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "Conflict error message",
+                                "example": "Conflict: Resource already exists"
+                            }
+                        }
                     }
                 }
             }
