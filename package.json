@@ -17,10 +17,16 @@
     "test": "npm run test --workspaces",
     "test:api": "npm run test --workspace=api",
     "test:frontend": "npm run test --workspace=frontend",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report",
     "lint": "npm run lint --workspace=frontend",
     "prettify": "prettier --cache --write \"**/*.{ts,tsx}\""
   },
   "devDependencies": {
+    "@playwright/test": "^1.40.0",
     "concurrently": "^6.2.1",
     "prettier": "^3.3.3"
   },

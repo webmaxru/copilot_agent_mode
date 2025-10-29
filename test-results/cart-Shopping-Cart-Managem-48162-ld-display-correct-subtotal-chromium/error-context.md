@@ -1,0 +1,142 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e6]:
+      - link "Copilot icon OctoCAT Supply Smart Cat Tech, Powered by AI" [ref=e8] [cursor=pointer]:
+        - /url: /
+        - img "Copilot icon" [ref=e9]
+        - generic [ref=e10]:
+          - text: OctoCAT Supply
+          - generic [ref=e11]: Smart Cat Tech, Powered by AI
+      - generic [ref=e13]:
+        - link "Home" [ref=e14] [cursor=pointer]:
+          - /url: /
+        - link "Products" [ref=e15] [cursor=pointer]:
+          - /url: /products
+        - link "About us" [ref=e16] [cursor=pointer]:
+          - /url: /about
+      - generic [ref=e17]:
+        - link "Shopping cart" [ref=e18] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e19]
+          - generic [ref=e21]: "3"
+        - button "Toggle dark/light mode" [ref=e22] [cursor=pointer]:
+          - img [ref=e23]
+        - link "Login" [ref=e25] [cursor=pointer]:
+          - /url: /login
+  - main [ref=e26]:
+    - generic [ref=e28]:
+      - heading "Shopping Cart" [level=1] [ref=e29]
+      - generic [ref=e30]:
+        - generic [ref=e32]:
+          - generic [ref=e33]:
+            - generic [ref=e34]: S. No.
+            - generic [ref=e35]: Product Image
+            - generic [ref=e36]: Product Name
+            - generic [ref=e37]: Unit Price
+            - generic [ref=e38]: Quantity
+            - generic [ref=e39]: Total
+            - generic [ref=e40]: Remove
+          - generic [ref=e41]:
+            - generic [ref=e42]: "1"
+            - img "Smart Cat Feeder" [ref=e45]
+            - heading "Smart Cat Feeder" [level=3] [ref=e47]
+            - generic [ref=e49]: $89.99
+            - generic [ref=e51]:
+              - button "Decrease quantity of Smart Cat Feeder" [ref=e52] [cursor=pointer]: "-"
+              - generic [ref=e53]: "2"
+              - button "Increase quantity of Smart Cat Feeder" [ref=e54] [cursor=pointer]: +
+            - generic [ref=e56]: $179.98
+            - button "Remove Smart Cat Feeder from cart" [ref=e58] [cursor=pointer]:
+              - img [ref=e59]
+          - generic [ref=e61]:
+            - generic [ref=e62]: "2"
+            - img "AI Cat Toy" [ref=e65]
+            - heading "AI Cat Toy" [level=3] [ref=e67]
+            - generic [ref=e69]: $49.99
+            - generic [ref=e71]:
+              - button "Decrease quantity of AI Cat Toy" [ref=e72] [cursor=pointer]: "-"
+              - generic [ref=e73]: "1"
+              - button "Increase quantity of AI Cat Toy" [ref=e74] [cursor=pointer]: +
+            - generic [ref=e76]: $49.99
+            - button "Remove AI Cat Toy from cart" [ref=e78] [cursor=pointer]:
+              - img [ref=e79]
+        - generic [ref=e82]:
+          - heading "Order Summary" [level=2] [ref=e83]
+          - generic [ref=e84]:
+            - generic [ref=e85]:
+              - generic [ref=e86]: Subtotal
+              - generic [ref=e87]: $229.97
+            - generic [ref=e88]:
+              - generic [ref=e89]: Shipping
+              - generic [ref=e90]: FREE
+            - generic [ref=e92]:
+              - generic [ref=e93]: Grand Total
+              - generic [ref=e94]: $229.97
+          - button "Proceed To Checkout" [ref=e95] [cursor=pointer]
+          - link "Continue Shopping" [ref=e96] [cursor=pointer]:
+            - /url: /products
+  - contentinfo [ref=e97]:
+    - generic [ref=e98]:
+      - generic [ref=e99]:
+        - generic [ref=e100]:
+          - heading "About" [level=2] [ref=e101]
+          - paragraph [ref=e102]: OctoCAT Supply is the leading provider of AI-powered smart products for your feline companions. Our innovative technology enhances your cat's wellbeing through intelligent monitoring, interactive entertainment, and personalized comfort solutions.
+        - generic [ref=e103]:
+          - heading "Account" [level=2] [ref=e104]
+          - list [ref=e105]:
+            - listitem [ref=e106]:
+              - link "My Cart" [ref=e107] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e108]:
+              - link "Checkout" [ref=e109] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e110]:
+              - link "Shopping Details" [ref=e111] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e112]:
+              - link "Order" [ref=e113] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e114]:
+              - link "Help Center" [ref=e115] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e116]:
+          - heading "Helpful Links" [level=2] [ref=e117]
+          - list [ref=e118]:
+            - listitem [ref=e119]:
+              - link "Services" [ref=e120] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e121]:
+              - link "Supports" [ref=e122] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e123]:
+              - link "Feedback" [ref=e124] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e125]:
+              - link "Terms & Conditions" [ref=e126] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e127]:
+              - link "Privacy Policy" [ref=e128] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e129]:
+          - heading "Social Media" [level=2] [ref=e130]
+          - list [ref=e131]:
+            - listitem [ref=e132]:
+              - link "Twitter" [ref=e133] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e134]:
+              - link "Facebook" [ref=e135] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e136]:
+              - link "Youtube" [ref=e137] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e138]:
+              - link "Linkedin" [ref=e139] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e140]:
+              - link "Instagram" [ref=e141] [cursor=pointer]:
+                - /url: "#"
+      - paragraph [ref=e143]: Copyright © 2025 OctoCAT Supply. All Rights Reserved
+```
