@@ -145,8 +145,13 @@ let headquartersRepo: HeadquartersRepository | null = null;
 export async function getHeadquartersRepository(
   isTest: boolean = false,
 ): Promise<HeadquartersRepository> {
+  const isTestEnv = isTest || process.env.NODE_ENV === 'test' || process.env.VITEST === 'true';
+  if (isTestEnv) {
+    // In tests, always return a fresh repository bound to the current in-memory DB
+    return createHeadquartersRepository(true);
+  }
   if (!headquartersRepo) {
-    headquartersRepo = await createHeadquartersRepository(isTest);
+    headquartersRepo = await createHeadquartersRepository(false);
   }
   return headquartersRepo;
 }

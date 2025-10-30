@@ -152,8 +152,13 @@ export async function createProductsRepository(
 let productsRepo: ProductsRepository | null = null;
 
 export async function getProductsRepository(isTest: boolean = false): Promise<ProductsRepository> {
+  const isTestEnv = isTest || process.env.NODE_ENV === 'test' || process.env.VITEST === 'true';
+  if (isTestEnv) {
+    // In tests, always return a fresh repository bound to the current in-memory DB
+    return createProductsRepository(true);
+  }
   if (!productsRepo) {
-    productsRepo = await createProductsRepository(isTest);
+    productsRepo = await createProductsRepository(false);
   }
   return productsRepo;
 }
