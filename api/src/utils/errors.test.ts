@@ -101,12 +101,13 @@ describe('Error Utilities', () => {
 
       try {
         handleDatabaseError(sqliteError);
-        expect.fail('Should have thrown an error');
       } catch (error: any) {
         expect(error).toBeInstanceOf(DatabaseError);
         expect(error.statusCode).toBe(503);
         expect(error.message).toBe('Database is temporarily unavailable');
+        return;
       }
+      throw new Error('Expected handleDatabaseError to throw an error');
     });
 
     it('should rethrow DatabaseError instances', () => {
@@ -133,12 +134,13 @@ describe('Error Utilities', () => {
 
       try {
         handleDatabaseError(unknownError);
-        expect.fail('Should have thrown an error');
       } catch (error: any) {
         expect(error).toBeInstanceOf(DatabaseError);
         expect(error.statusCode).toBe(500);
         expect(error.message).toContain('Some unknown error');
+        return;
       }
+      throw new Error('Expected handleDatabaseError to throw an error');
     });
   });
 
