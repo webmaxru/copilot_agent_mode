@@ -10,6 +10,7 @@
  * /api/suppliers:
  *   get:
  *     summary: Returns all suppliers
+ *     description: Retrieves a complete list of all suppliers in the system
  *     tags: [Suppliers]
  *     responses:
  *       200:
@@ -20,15 +21,55 @@
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Supplier'
+ *             example:
+ *               - supplierId: 1
+ *                 name: "PurrTech Innovations"
+ *                 description: "Leading supplier of premium smart cat technology"
+ *                 contactPerson: "Felix Whiskerton"
+ *                 email: "felix@purrtech.co"
+ *                 phone: "555-0101"
+ *               - supplierId: 2
+ *                 name: "WhiskerWare Systems"
+ *                 description: "Advanced feline-focused smart product supplier"
+ *                 contactPerson: "Tabitha Pawson"
+ *                 email: "tabitha@whiskerware.com"
+ *                 phone: "555-0102"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *   post:
  *     summary: Create a new supplier
+ *     description: Creates a new supplier with the provided details
  *     tags: [Suppliers]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Supplier'
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               contactPerson:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               phone:
+ *                 type: string
+ *           example:
+ *             name: "MeowTech Solutions"
+ *             description: "Innovative cat technology provider"
+ *             contactPerson: "Jane Doe"
+ *             email: "jane@meowtech.com"
+ *             phone: "555-1234"
  *     responses:
  *       201:
  *         description: Supplier created successfully
@@ -36,10 +77,38 @@
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Supplier'
+ *             example:
+ *               supplierId: 4
+ *               name: "MeowTech Solutions"
+ *               description: "Innovative cat technology provider"
+ *               contactPerson: "Jane Doe"
+ *               email: "jane@meowtech.com"
+ *               phone: "555-1234"
+ *       400:
+ *         description: Validation error - invalid input data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               error:
+ *                 code: "VALIDATION_ERROR"
+ *                 message: "Validation error: Name is required"
+ *       409:
+ *         description: Conflict - supplier already exists
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               error:
+ *                 code: "CONFLICT"
+ *                 message: "Conflict: Resource already exists"
  *
  * /api/suppliers/{id}:
  *   get:
  *     summary: Get a supplier by ID
+ *     description: Retrieves a single supplier by their unique identifier
  *     tags: [Suppliers]
  *     parameters:
  *       - in: path
@@ -48,6 +117,7 @@
  *         schema:
  *           type: integer
  *         description: Supplier ID
+ *         example: 1
  *     responses:
  *       200:
  *         description: Supplier found
@@ -55,10 +125,26 @@
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Supplier'
+ *             example:
+ *               supplierId: 1
+ *               name: "PurrTech Innovations"
+ *               description: "Leading supplier of premium smart cat technology"
+ *               contactPerson: "Felix Whiskerton"
+ *               email: "felix@purrtech.co"
+ *               phone: "555-0101"
  *       404:
  *         description: Supplier not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               error:
+ *                 code: "NOT_FOUND"
+ *                 message: "Supplier with ID 999 not found"
  *   put:
  *     summary: Update a supplier
+ *     description: Updates an existing supplier's information
  *     tags: [Suppliers]
  *     parameters:
  *       - in: path
@@ -67,12 +153,27 @@
  *         schema:
  *           type: integer
  *         description: Supplier ID
+ *         example: 1
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Supplier'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               contactPerson:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *           example:
+ *             name: "PurrTech Innovations Inc."
+ *             description: "Premium smart cat technology leader"
  *     responses:
  *       200:
  *         description: Supplier updated successfully
@@ -80,10 +181,32 @@
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Supplier'
+ *             example:
+ *               supplierId: 1
+ *               name: "PurrTech Innovations Inc."
+ *               description: "Premium smart cat technology leader"
+ *               contactPerson: "Felix Whiskerton"
+ *               email: "felix@purrtech.co"
+ *               phone: "555-0101"
  *       404:
  *         description: Supplier not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               error:
+ *                 code: "NOT_FOUND"
+ *                 message: "Supplier with ID 999 not found"
+ *       400:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *   delete:
  *     summary: Delete a supplier
+ *     description: Deletes a supplier from the system (requires no dependent products)
  *     tags: [Suppliers]
  *     parameters:
  *       - in: path
@@ -92,11 +215,30 @@
  *         schema:
  *           type: integer
  *         description: Supplier ID
+ *         example: 1
  *     responses:
  *       204:
  *         description: Supplier deleted successfully
  *       404:
  *         description: Supplier not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               error:
+ *                 code: "NOT_FOUND"
+ *                 message: "Supplier with ID 999 not found"
+ *       409:
+ *         description: Conflict - supplier has dependent products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               error:
+ *                 code: "VALIDATION_ERROR"
+ *                 message: "Validation error: Invalid reference to related entity"
  */
 
 import express from 'express';
