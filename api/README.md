@@ -565,7 +565,7 @@ curl http://localhost:3000/
 
 - [Architecture Overview](../docs/architecture.md) - High-level system design
 - [SQLite Integration](../docs/sqlite-integration.md) - Database details and patterns
-- [API Instructions]../.github/instructions/api.instructions.md) - Code review guidelines
+- [API Instructions](../.github/instructions/api.instructions.md) - Code review guidelines
 - [Database Instructions](../.github/instructions/database.instructions.md) - Schema guidelines
 - [Root README](../README.md) - Project overview and setup
 

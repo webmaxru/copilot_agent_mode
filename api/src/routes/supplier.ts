@@ -238,7 +238,7 @@
  *             example:
  *               error:
  *                 code: "VALIDATION_ERROR"
- *                 message: "Validation error: Invalid reference to related entity"
+ *                 message: "Validation error: Cannot delete supplier with existing products"
  */
 
 import express from 'express';
