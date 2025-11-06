@@ -122,4 +122,23 @@ describe('Product API', () => {
     const response = await request(app).get('/products/999');
     expect(response.status).toBe(404);
   });
+
+  it('should handle update errors for non-existing product', async () => {
+    const updateData = {
+      supplierId: 1,
+      name: 'Non-existent Product',
+      description: 'Test',
+      price: 99.99,
+      sku: 'TST-001',
+      unit: 'pcs',
+      imgName: 'test.jpg',
+    };
+    const response = await request(app).put('/products/999').send(updateData);
+    expect(response.status).toBe(404);
+  });
+
+  it('should handle delete errors for non-existing product', async () => {
+    const response = await request(app).delete('/products/999');
+    expect(response.status).toBe(404);
+  });
 });
