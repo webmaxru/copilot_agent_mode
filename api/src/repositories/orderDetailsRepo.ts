@@ -175,8 +175,13 @@ let orderDetailsRepo: OrderDetailsRepository | null = null;
 export async function getOrderDetailsRepository(
   isTest: boolean = false,
 ): Promise<OrderDetailsRepository> {
+  const isTestEnv = isTest || process.env.NODE_ENV === 'test' || process.env.VITEST === 'true';
+  if (isTestEnv) {
+    // In tests, always return a fresh repository bound to the current in-memory DB
+    return createOrderDetailsRepository(true);
+  }
   if (!orderDetailsRepo) {
-    orderDetailsRepo = await createOrderDetailsRepository(isTest);
+    orderDetailsRepo = await createOrderDetailsRepository(false);
   }
   return orderDetailsRepo;
 }
