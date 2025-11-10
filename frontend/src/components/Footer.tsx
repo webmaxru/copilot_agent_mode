@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 
 const Footer: React.FC = () => {
@@ -25,9 +26,9 @@ const Footer: React.FC = () => {
             <h2 className="font-bold text-xl mb-4 text-primary">Account</h2>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="hover:text-primary">
+                <Link to="/cart" className="hover:text-primary">
                   My Cart
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#" className="hover:text-primary">
