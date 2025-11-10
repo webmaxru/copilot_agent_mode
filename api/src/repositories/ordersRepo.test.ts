@@ -19,8 +19,9 @@ describe('OrdersRepository', () => {
     orderId: 1,
     branchId: 1,
     orderDate: '2024-01-15',
+    name: 'Test Order',
+    description: 'Test order',
     status: 'pending',
-    notes: 'Test order',
   };
 
   beforeEach(() => {
@@ -47,8 +48,9 @@ describe('OrdersRepository', () => {
           order_id: 1,
           branch_id: 1,
           order_date: '2024-01-15',
+          name: 'Test Order',
+          description: 'Test order',
           status: 'pending',
-          notes: 'Test order',
         },
       ];
       mockDb.all.mockResolvedValue(mockResults);
@@ -76,8 +78,9 @@ describe('OrdersRepository', () => {
         order_id: 1,
         branch_id: 1,
         order_date: '2024-01-15',
+        name: 'Test Order',
+        description: 'Test order',
         status: 'pending',
-        notes: 'Test order',
       };
       mockDb.get.mockResolvedValue(mockResult);
 
@@ -102,8 +105,9 @@ describe('OrdersRepository', () => {
       const newOrder = {
         branchId: 1,
         orderDate: '2024-01-20',
+        name: 'New Order',
+        description: 'New order description',
         status: 'pending',
-        notes: 'New order',
       };
 
       mockDb.run.mockResolvedValue({ lastID: 2, changes: 1 });
@@ -111,18 +115,19 @@ describe('OrdersRepository', () => {
         order_id: 2,
         branch_id: 1,
         order_date: '2024-01-20',
+        name: 'New Order',
+        description: 'New order description',
         status: 'pending',
-        notes: 'New order',
       });
 
       const result = await repository.create(newOrder);
 
       expect(mockDb.run).toHaveBeenCalledWith(
-        'INSERT INTO orders (branch_id, order_date, status, notes) VALUES (?, ?, ?, ?)',
-        [1, '2024-01-20', 'pending', 'New order'],
+        'INSERT INTO orders (branch_id, order_date, name, description, status) VALUES (?, ?, ?, ?, ?)',
+        [1, '2024-01-20', 'New Order', 'New order description', 'pending'],
       );
       expect(result.orderId).toBe(2);
-      expect(result.notes).toBe('New order');
+      expect(result.name).toBe('New Order');
     });
   });
 
@@ -135,8 +140,9 @@ describe('OrdersRepository', () => {
         order_id: 1,
         branch_id: 1,
         order_date: '2024-01-15',
+        name: 'Test Order',
+        description: 'Test order',
         status: 'completed',
-        notes: 'Test order',
       });
 
       const result = await repository.update(1, updateData);
@@ -202,15 +208,17 @@ describe('OrdersRepository', () => {
           order_id: 1,
           branch_id: 1,
           order_date: '2024-01-20',
+          name: 'Order A',
+          description: 'Order A description',
           status: 'completed',
-          notes: 'Order A',
         },
         {
           order_id: 2,
           branch_id: 1,
           order_date: '2024-01-15',
+          name: 'Order B',
+          description: 'Order B description',
           status: 'pending',
-          notes: 'Order B',
         },
       ];
       mockDb.all.mockResolvedValue(mockResults);
@@ -232,8 +240,9 @@ describe('OrdersRepository', () => {
           order_id: 1,
           branch_id: 1,
           order_date: '2024-01-20',
+          name: 'Order A',
+          description: 'Order A description',
           status: 'pending',
-          notes: 'Order A',
         },
       ];
       mockDb.all.mockResolvedValue(mockResults);
@@ -256,8 +265,9 @@ describe('OrdersRepository', () => {
           order_id: 1,
           branch_id: 1,
           order_date: '2024-01-15',
+          name: 'Order A',
+          description: 'Order A description',
           status: 'pending',
-          notes: 'Order A',
         },
       ];
       mockDb.all.mockResolvedValue(mockResults);
