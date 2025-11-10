@@ -105,11 +105,38 @@ To showcase extended capabilities:
 - [Detailed Architecture](./docs/architecture.md)
 - [SQLite Integration](./docs/sqlite-integration.md)
 - [Complete Demo Script](./docs/demo-script.md)
+- [Build & Testing Guide](./docs/build.md)
 
 Database defaults and env vars:
 - DB file: `api/data/app.db` (override with `DB_FILE=/absolute/path/to/file.db`)
 - Enable WAL: `DB_ENABLE_WAL=true` (default)
 - Foreign keys: `DB_FOREIGN_KEYS=true` (default)
+
+## 🤖 Copilot Instructions
+
+This repository includes comprehensive GitHub Copilot instructions to guide AI-assisted development:
+
+### Main Instructions (`.github/copilot-instructions.md`)
+Repository-wide guidelines covering:
+- Project overview and tech stack
+- Build, test, and development workflows
+- Code review guidance and priority escalation
+- Coding conventions and style standards
+- Forbidden actions for security and quality
+- Custom agents documentation
+
+### Modular Instructions (`.github/instructions/*.instructions.md`)
+Context-specific guidance for different parts of the codebase:
+- **`frontend.instructions.md`** - React, Vite, Tailwind, accessibility, performance
+- **`api.instructions.md`** - Express API, SQLite, security, error handling
+- **`database.instructions.md`** - Schema migrations, data integrity, indexes
+
+### Custom Agents (`.github/agents/*.agent.md`)
+Specialized agents for specific tasks:
+- **BDD Agent** - Generate Behavior-Driven Development feature files
+- **RefinePrompt Agent** - Transform vague prompts into clear, executable instructions
+
+Use `@copilot` mentions in issues and pull requests to leverage these instructions and agents for optimal AI-assisted development experience.
 
 ## 🎓 Pro Tips for Solution Engineers
 
