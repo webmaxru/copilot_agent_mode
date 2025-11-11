@@ -154,6 +154,46 @@ export class OrdersRepository {
       handleDatabaseError(error);
     }
   }
+
+  /**
+   * Find active cart for a branch (status='cart')
+   */
+  async findActiveCart(branchId: number): Promise<Order | null> {
+    try {
+      const row = await this.db.get<any>(
+        'SELECT * FROM orders WHERE branch_id = ? AND status = ? ORDER BY order_date DESC LIMIT 1',
+        [branchId, 'cart'],
+      );
+      return row ? (objectToCamelCase(row) as Order) : null;
+    } catch (error) {
+      handleDatabaseError(error);
+    }
+  }
+
+  /**
+   * Update order status
+   */
+  async updateStatus(id: number, status: string): Promise<Order> {
+    try {
+      const result = await this.db.run('UPDATE orders SET status = ? WHERE order_id = ?', [
+        status,
+        id,
+      ]);
+
+      if (result.changes === 0) {
+        throw new NotFoundError('Order', id);
+      }
+
+      const updatedOrder = await this.findById(id);
+      if (!updatedOrder) {
+        throw new Error('Failed to retrieve updated order');
+      }
+
+      return updatedOrder;
+    } catch (error) {
+      handleDatabaseError(error, 'Order', id);
+    }
+  }
 }
 
 // Factory function to create repository instance

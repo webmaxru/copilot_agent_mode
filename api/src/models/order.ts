@@ -22,7 +22,7 @@
  *         status:
  *           type: string
  *           description: The current status of the order
- *           enum: [pending, processing, shipped, delivered, cancelled]
+ *           enum: [cart, pending, processing, shipped, delivered, cancelled]
  *         totalAmount:
  *           type: number
  *           format: float

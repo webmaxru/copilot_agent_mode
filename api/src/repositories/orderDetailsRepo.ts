@@ -159,6 +159,41 @@ export class OrderDetailsRepository {
       handleDatabaseError(error);
     }
   }
+
+  /**
+   * Find or create order detail for a product in an order (upsert for cart items)
+   */
+  async upsertCartItem(
+    orderId: number,
+    productId: number,
+    quantity: number,
+    unitPrice: number,
+  ): Promise<OrderDetail> {
+    try {
+      // Check if item already exists
+      const existing = await this.db.get<any>(
+        'SELECT * FROM order_details WHERE order_id = ? AND product_id = ?',
+        [orderId, productId],
+      );
+
+      if (existing) {
+        // Update existing item quantity
+        const newQuantity = existing.quantity + quantity;
+        return await this.update(existing.order_detail_id, { quantity: newQuantity });
+      } else {
+        // Create new item
+        return await this.create({
+          orderId,
+          productId,
+          quantity,
+          unitPrice,
+          notes: '',
+        });
+      }
+    } catch (error) {
+      handleDatabaseError(error);
+    }
+  }
 }
 
 // Factory function to create repository instance
