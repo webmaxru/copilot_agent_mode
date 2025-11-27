@@ -102,6 +102,7 @@ To showcase extended capabilities:
 
 ## 📚 Documentation
 
+- [API Reference](./docs/api.md) - Complete REST API documentation with examples
 - [Detailed Architecture](./docs/architecture.md)
 - [SQLite Integration](./docs/sqlite-integration.md)
 - [Complete Demo Script](./docs/demo-script.md)
