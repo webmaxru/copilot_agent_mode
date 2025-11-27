@@ -88,7 +88,6 @@ Once the server is running, you can access the Swagger UI documentation at:
 | Environment | URL |
 |-------------|-----|
 | Development | `http://localhost:3000` |
-| Development (HTTPS) | `https://localhost:3000` |
 
 All API endpoints are prefixed with `/api`.
 
