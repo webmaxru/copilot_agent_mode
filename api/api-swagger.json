@@ -1,26 +1,39 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Express API with Swagger",
+        "title": "OctoCAT Supply Chain Management API",
         "version": "1.0.0",
-        "description": "REST API documentation using Swagger/OpenAPI"
+        "description": "A comprehensive REST API for managing supply chain operations including suppliers, products, orders, deliveries, and branch locations. Built with Express.js, TypeScript, and SQLite.",
+        "contact": {
+            "name": "API Support",
+            "url": "https://github.com/webmaxru/copilot_agent_mode"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
     },
     "servers": [
         {
             "url": "http://localhost:3000",
             "description": "Development server"
+        },
+        {
+            "url": "https://localhost:3000",
+            "description": "Development server (HTTPS)"
         }
     ],
     "paths": {
         "/api/branches": {
             "get": {
-                "summary": "Returns all branches",
+                "summary": "Get all branches",
+                "description": "Retrieves a list of all branch locations in the supply chain network. Branches are linked to headquarters and can place orders.",
                 "tags": [
                     "Branches"
                 ],
                 "responses": {
                     "200": {
-                        "description": "List of all branches",
+                        "description": "List of all branches retrieved successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -28,6 +41,38 @@
                                     "items": {
                                         "$ref": "#/components/schemas/Branch"
                                     }
+                                },
+                                "example": [
+                                    {
+                                        "branchId": 1,
+                                        "headquartersId": 1,
+                                        "name": "North Branch",
+                                        "description": "Northern region branch office",
+                                        "address": "123 North St, City, State 12345",
+                                        "contactPerson": "John Doe",
+                                        "email": "north@example.com",
+                                        "phone": "555-0101"
+                                    },
+                                    {
+                                        "branchId": 2,
+                                        "headquartersId": 1,
+                                        "name": "South Branch",
+                                        "description": "Southern region branch office",
+                                        "address": "456 South Ave, City, State 67890",
+                                        "contactPerson": "Jane Smith",
+                                        "email": "south@example.com",
+                                        "phone": "555-0102"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
                                 }
                             }
                         }
@@ -36,15 +81,58 @@
             },
             "post": {
                 "summary": "Create a new branch",
+                "description": "Creates a new branch location. The branch must be associated with an existing headquarters.",
                 "tags": [
                     "Branches"
                 ],
                 "requestBody": {
                     "required": true,
+                    "description": "Branch data to create. The branchId is auto-generated and should not be provided.",
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Branch"
+                                "type": "object",
+                                "required": ["headquartersId", "name"],
+                                "properties": {
+                                    "headquartersId": {
+                                        "type": "integer",
+                                        "description": "ID of the parent headquarters"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "description": "Branch name"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "description": "Branch description"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "description": "Physical address"
+                                    },
+                                    "contactPerson": {
+                                        "type": "string",
+                                        "description": "Primary contact name"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "description": "Contact email"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "description": "Contact phone number"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "headquartersId": 1,
+                                "name": "West Branch",
+                                "description": "Western region branch office",
+                                "address": "789 West Blvd, City, State 11111",
+                                "contactPerson": "Bob Johnson",
+                                "email": "west@example.com",
+                                "phone": "555-0103"
                             }
                         }
                     }
@@ -56,6 +144,46 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Branch"
+                                },
+                                "example": {
+                                    "branchId": 3,
+                                    "headquartersId": 1,
+                                    "name": "West Branch",
+                                    "description": "Western region branch office",
+                                    "address": "789 West Blvd, City, State 11111",
+                                    "contactPerson": "Bob Johnson",
+                                    "email": "west@example.com",
+                                    "phone": "555-0103"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict - headquarters does not exist or constraint violation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
                                 }
                             }
                         }
@@ -66,6 +194,7 @@
         "/api/branches/{id}": {
             "get": {
                 "summary": "Get a branch by ID",
+                "description": "Retrieves detailed information about a specific branch location by its unique identifier.",
                 "tags": [
                     "Branches"
                 ],
@@ -75,24 +204,56 @@
                         "name": "id",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "minimum": 1
                         },
-                        "description": "Branch ID"
+                        "description": "Unique branch identifier",
+                        "example": 1
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Branch found",
+                        "description": "Branch found successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Branch"
+                                },
+                                "example": {
+                                    "branchId": 1,
+                                    "headquartersId": 1,
+                                    "name": "North Branch",
+                                    "description": "Northern region branch office",
+                                    "address": "123 North St, City, State 12345",
+                                    "contactPerson": "John Doe",
+                                    "email": "north@example.com",
+                                    "phone": "555-0101"
                                 }
                             }
                         }
                     },
                     "404": {
-                        "description": "Branch not found"
+                        "description": "Branch not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "error": "Branch not found"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -1519,6 +1680,27 @@
                         "type": "string",
                         "description": "Additional details about the supplier"
                     }
+                }
+            },
+            "Error": {
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "string",
+                        "description": "Error message describing what went wrong"
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "Detailed error message (when available)"
+                    },
+                    "statusCode": {
+                        "type": "integer",
+                        "description": "HTTP status code"
+                    }
+                },
+                "example": {
+                    "error": "Resource not found",
+                    "statusCode": 404
                 }
             }
         }

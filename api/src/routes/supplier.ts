@@ -106,7 +106,16 @@ import { handleDatabaseError, NotFoundError } from '../utils/errors';
 
 const router = express.Router();
 
-// Create a new supplier
+/**
+ * POST /api/suppliers
+ * Creates a new supplier in the system.
+ * 
+ * @param {Object} req.body - Supplier data (excluding supplierId which is auto-generated)
+ * @returns {Object} 201 - Created supplier with generated ID
+ * @throws {ValidationError} 400 - Invalid request data
+ * @throws {ConflictError} 409 - Constraint violation
+ * @throws {DatabaseError} 500 - Database operation failed
+ */
 router.post('/', async (req, res, next) => {
   try {
     const repo = await getSuppliersRepository();
@@ -117,7 +126,13 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-// Get all suppliers
+/**
+ * GET /api/suppliers
+ * Retrieves all suppliers in the system.
+ * 
+ * @returns {Array} 200 - Array of all supplier objects
+ * @throws {DatabaseError} 500 - Database operation failed
+ */
 router.get('/', async (req, res, next) => {
   try {
     const repo = await getSuppliersRepository();
@@ -128,7 +143,15 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// Get a supplier by ID
+/**
+ * GET /api/suppliers/:id
+ * Retrieves a specific supplier by their unique ID.
+ * 
+ * @param {number} req.params.id - Supplier ID
+ * @returns {Object} 200 - Supplier object if found
+ * @returns {string} 404 - Supplier not found message
+ * @throws {DatabaseError} 500 - Database operation failed
+ */
 router.get('/:id', async (req, res, next) => {
   try {
     const repo = await getSuppliersRepository();
@@ -143,7 +166,17 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-// Update a supplier by ID
+/**
+ * PUT /api/suppliers/:id
+ * Updates an existing supplier's information.
+ * 
+ * @param {number} req.params.id - Supplier ID
+ * @param {Object} req.body - Partial or complete supplier data to update
+ * @returns {Object} 200 - Updated supplier object
+ * @returns {string} 404 - Supplier not found
+ * @throws {ValidationError} 400 - Invalid request data
+ * @throws {DatabaseError} 500 - Database operation failed
+ */
 router.put('/:id', async (req, res, next) => {
   try {
     const repo = await getSuppliersRepository();
@@ -158,7 +191,17 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
-// Delete a supplier by ID
+/**
+ * DELETE /api/suppliers/:id
+ * Deletes a supplier from the system.
+ * Note: This will cascade delete related products and deliveries due to foreign key constraints.
+ * 
+ * @param {number} req.params.id - Supplier ID
+ * @returns {void} 204 - Supplier deleted successfully (no content)
+ * @returns {string} 404 - Supplier not found
+ * @throws {ConflictError} 409 - Cannot delete due to constraint violations
+ * @throws {DatabaseError} 500 - Database operation failed
+ */
 router.delete('/:id', async (req, res, next) => {
   try {
     const repo = await getSuppliersRepository();

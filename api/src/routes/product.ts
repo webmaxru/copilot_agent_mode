@@ -106,7 +106,17 @@ import { handleDatabaseError, NotFoundError } from '../utils/errors';
 
 const router = express.Router();
 
-// Create a new product
+/**
+ * POST /api/products
+ * Creates a new product in the catalog.
+ * Products must be associated with a valid supplier.
+ * 
+ * @param {Object} req.body - Product data (excluding productId which is auto-generated)
+ * @returns {Object} 201 - Created product with generated ID
+ * @throws {ValidationError} 400 - Invalid request data (e.g., missing required fields)
+ * @throws {ConflictError} 409 - Supplier does not exist or SKU conflict
+ * @throws {DatabaseError} 500 - Database operation failed
+ */
 router.post('/', async (req, res, next) => {
   try {
     const repo = await getProductsRepository();
@@ -117,7 +127,13 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-// Get all products
+/**
+ * GET /api/products
+ * Retrieves all products in the catalog.
+ * 
+ * @returns {Array} 200 - Array of all product objects
+ * @throws {DatabaseError} 500 - Database operation failed
+ */
 router.get('/', async (req, res, next) => {
   try {
     const repo = await getProductsRepository();
@@ -128,7 +144,15 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// Get a product by ID
+/**
+ * GET /api/products/:id
+ * Retrieves a specific product by its unique ID.
+ * 
+ * @param {number} req.params.id - Product ID
+ * @returns {Object} 200 - Product object if found
+ * @returns {string} 404 - Product not found message
+ * @throws {DatabaseError} 500 - Database operation failed
+ */
 router.get('/:id', async (req, res, next) => {
   try {
     const repo = await getProductsRepository();
@@ -143,7 +167,15 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-// Get a product by name
+/**
+ * GET /api/products/name/:name
+ * Searches for a product by its exact name.
+ * 
+ * @param {string} req.params.name - Product name (case-sensitive)
+ * @returns {Object} 200 - Product object if found
+ * @returns {string} 404 - Product not found message
+ * @throws {DatabaseError} 500 - Database operation failed
+ */
 router.get('/name/:name', async (req, res, next) => {
   try {
     const repo = await getProductsRepository();
@@ -158,7 +190,19 @@ router.get('/name/:name', async (req, res, next) => {
   }
 });
 
-// Update a product by ID
+/**
+ * PUT /api/products/:id
+ * Updates an existing product's information.
+ * Partial updates are supported - only provided fields will be updated.
+ * 
+ * @param {number} req.params.id - Product ID
+ * @param {Object} req.body - Partial or complete product data to update
+ * @returns {Object} 200 - Updated product object
+ * @returns {string} 404 - Product not found
+ * @throws {ValidationError} 400 - Invalid request data
+ * @throws {ConflictError} 409 - SKU conflict or invalid supplier reference
+ * @throws {DatabaseError} 500 - Database operation failed
+ */
 router.put('/:id', async (req, res, next) => {
   try {
     const repo = await getProductsRepository();
@@ -173,7 +217,17 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
-// Delete a product by ID
+/**
+ * DELETE /api/products/:id
+ * Deletes a product from the catalog.
+ * Note: This will cascade delete related order details due to foreign key constraints.
+ * 
+ * @param {number} req.params.id - Product ID
+ * @returns {void} 204 - Product deleted successfully (no content)
+ * @returns {string} 404 - Product not found
+ * @throws {ConflictError} 409 - Cannot delete due to existing orders
+ * @throws {DatabaseError} 500 - Database operation failed
+ */
 router.delete('/:id', async (req, res, next) => {
   try {
     const repo = await getProductsRepository();

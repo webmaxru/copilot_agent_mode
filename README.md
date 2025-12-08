@@ -102,9 +102,14 @@ To showcase extended capabilities:
 
 ## 📚 Documentation
 
-- [Detailed Architecture](./docs/architecture.md)
-- [SQLite Integration](./docs/sqlite-integration.md)
-- [Complete Demo Script](./docs/demo-script.md)
+- **[API Documentation](./api/README.md)** - Complete API reference, setup guide, and development workflow
+- [Detailed Architecture](./docs/architecture.md) - System architecture and design overview
+- [SQLite Integration](./docs/sqlite-integration.md) - Database setup and usage guide
+- [Complete Demo Script](./docs/demo-script.md) - Step-by-step demo scenarios
+
+### Quick Links
+- **API Swagger Docs**: `http://localhost:3000/api-docs` (when running locally)
+- **API OpenAPI Spec**: [api/api-swagger.json](./api/api-swagger.json)
 
 Database defaults and env vars:
 - DB file: `api/data/app.db` (override with `DB_FILE=/absolute/path/to/file.db`)
