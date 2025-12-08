@@ -110,8 +110,8 @@ const router = express.Router();
  * POST /api/suppliers
  * Creates a new supplier in the system.
  * 
- * @param {Object} req.body - Supplier data (excluding supplierId which is auto-generated)
- * @returns {Object} 201 - Created supplier with generated ID
+ * @param {Omit<Supplier, 'supplierId'>} req.body - Supplier data (excluding supplierId which is auto-generated)
+ * @returns {Supplier} 201 - Created supplier with generated ID
  * @throws {ValidationError} 400 - Invalid request data
  * @throws {ConflictError} 409 - Constraint violation
  * @throws {DatabaseError} 500 - Database operation failed
@@ -171,8 +171,8 @@ router.get('/:id', async (req, res, next) => {
  * Updates an existing supplier's information.
  * 
  * @param {number} req.params.id - Supplier ID
- * @param {Object} req.body - Partial or complete supplier data to update
- * @returns {Object} 200 - Updated supplier object
+ * @param {Partial<Omit<Supplier, 'supplierId'>>} req.body - Partial or complete supplier data to update
+ * @returns {Supplier} 200 - Updated supplier object
  * @returns {string} 404 - Supplier not found
  * @throws {ValidationError} 400 - Invalid request data
  * @throws {DatabaseError} 500 - Database operation failed

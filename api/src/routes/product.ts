@@ -111,8 +111,8 @@ const router = express.Router();
  * Creates a new product in the catalog.
  * Products must be associated with a valid supplier.
  * 
- * @param {Object} req.body - Product data (excluding productId which is auto-generated)
- * @returns {Object} 201 - Created product with generated ID
+ * @param {Omit<Product, 'productId'>} req.body - Product data (excluding productId which is auto-generated)
+ * @returns {Product} 201 - Created product with generated ID
  * @throws {ValidationError} 400 - Invalid request data (e.g., missing required fields)
  * @throws {ConflictError} 409 - Supplier does not exist or SKU conflict
  * @throws {DatabaseError} 500 - Database operation failed
@@ -196,8 +196,8 @@ router.get('/name/:name', async (req, res, next) => {
  * Partial updates are supported - only provided fields will be updated.
  * 
  * @param {number} req.params.id - Product ID
- * @param {Object} req.body - Partial or complete product data to update
- * @returns {Object} 200 - Updated product object
+ * @param {Partial<Omit<Product, 'productId'>>} req.body - Partial or complete product data to update
+ * @returns {Product} 200 - Updated product object
  * @returns {string} 404 - Product not found
  * @throws {ValidationError} 400 - Invalid request data
  * @throws {ConflictError} 409 - SKU conflict or invalid supplier reference
