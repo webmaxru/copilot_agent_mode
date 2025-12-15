@@ -80,4 +80,7 @@ flowchart TD
 - Seeding: ordered SQL scripts in `api/sql/seed` to bootstrap demo data
 - Test mode: in-memory database (`:memory:`) for fast and isolated tests
 
-See the dedicated guide: `docs/sqlite-integration.md`.
+## Documentation
+
+- **[API Documentation](./api.md)** - Comprehensive API layer guide covering setup, development, and contribution guidelines
+- **[SQLite Integration](./sqlite-integration.md)** - Detailed database documentation

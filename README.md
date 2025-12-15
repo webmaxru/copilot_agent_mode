@@ -103,6 +103,7 @@ To showcase extended capabilities:
 ## 📚 Documentation
 
 - [Detailed Architecture](./docs/architecture.md)
+- [API Documentation](./docs/api.md) - Complete API layer guide
 - [SQLite Integration](./docs/sqlite-integration.md)
 - [Complete Demo Script](./docs/demo-script.md)
 
