@@ -102,20 +102,171 @@ Build output is placed in `api/dist/`.
 
 ### Running the API
 
-**Development mode** (with hot reload):
+#### Development Mode
+
+Development mode uses `tsx` to run TypeScript directly with hot reload support:
 
 ```bash
+# From repository root
 npm run dev --workspace=api
+
+# From api/ directory
+cd api
+npm run dev
 ```
 
-**Production mode** (requires build first):
+**What happens on startup:**
+1. Database initialization begins automatically
+2. Migrations are checked and applied if needed
+3. Seed data is loaded if the database is empty
+4. Express server starts listening
+5. CORS origins are configured and logged
+6. Swagger documentation becomes available
+
+**Expected console output:**
+
+```
+Configured CORS origins: [
+  'http://localhost:5137',
+  'http://localhost:3001',
+  /^https:\/\/.*\.app\.github\.dev$/
+]
+🚀 Initializing database...
+🚀 Starting database migration...
+✅ No pending migrations. Database is up to date.
+✅ Database initialized successfully
+Server is running on port 3000
+API documentation is available at http://localhost:3000/api-docs
+```
+
+**Development features:**
+- **Hot reload:** Changes to TypeScript files trigger automatic restart
+- **Verbose logging:** Database queries and errors are logged to console
+- **Source maps:** Stack traces reference TypeScript source files
+- **In-memory test DB:** Tests use `:memory:` database for isolation
+
+#### Production Mode
+
+Production mode runs the compiled JavaScript from the `dist/` folder:
 
 ```bash
+# Step 1: Build the TypeScript code
 npm run build --workspace=api
+
+# Step 2: Start the server
 npm run start --workspace=api
 ```
 
-The server starts on `http://localhost:3000` by default (configurable via `PORT` environment variable).
+**Production considerations:**
+- Build artifacts are in `api/dist/` (git-ignored)
+- No hot reload - restart required for code changes
+- Uses file-based SQLite database (`api/data/app.db`)
+- WAL mode enabled by default for better concurrency
+- Foreign key constraints enforced
+
+#### Server Configuration
+
+The server starts on `http://localhost:3000` by default. Configure via environment variables:
+
+```bash
+# Custom port
+PORT=8080 npm run dev --workspace=api
+
+# Custom database file
+DB_FILE=/var/data/production.db npm run start --workspace=api
+
+# Multiple environment variables
+PORT=8080 DB_FILE=./custom.db npm run dev --workspace=api
+```
+
+#### Accessing the Running API
+
+Once the server is running, you can access:
+
+| Endpoint | Description | URL |
+|----------|-------------|-----|
+| **Health Check** | Simple "Hello, world!" endpoint | http://localhost:3000/ |
+| **Swagger UI** | Interactive API documentation | http://localhost:3000/api-docs |
+| **OpenAPI JSON** | OpenAPI 3.0 specification | http://localhost:3000/api-docs.json |
+| **API Endpoints** | RESTful resources | http://localhost:3000/api/* |
+
+**Example API calls:**
+
+```bash
+# Get all suppliers
+curl http://localhost:3000/api/suppliers
+
+# Get supplier by ID
+curl http://localhost:3000/api/suppliers/1
+
+# Create new supplier
+curl -X POST http://localhost:3000/api/suppliers \
+  -H "Content-Type: application/json" \
+  -d '{"name":"New Supplier","email":"test@example.com"}'
+
+# Update supplier
+curl -X PUT http://localhost:3000/api/suppliers/1 \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Updated Name"}'
+
+# Delete supplier
+curl -X DELETE http://localhost:3000/api/suppliers/1
+```
+
+#### Stopping the Server
+
+- **Development mode:** Press `Ctrl+C` in the terminal
+- **Production mode:** Press `Ctrl+C` or kill the process
+
+#### Running Multiple Instances
+
+To run multiple API instances (e.g., for testing):
+
+```bash
+# Terminal 1 - Default port 3000
+npm run dev --workspace=api
+
+# Terminal 2 - Custom port 3001
+PORT=3001 DB_FILE=./data/app-test.db npm run dev --workspace=api
+```
+
+**Note:** Each instance should use a different database file to avoid locking issues.
+
+#### Common Startup Issues
+
+**Port already in use:**
+```
+Error: listen EADDRINUSE: address already in use :::3000
+```
+**Solution:** Use a different port or kill the process using port 3000:
+```bash
+# Find process using port 3000
+lsof -ti:3000
+
+# Kill the process (replace PID with actual process ID)
+kill -9 <PID>
+
+# Or use a different port
+PORT=3001 npm run dev --workspace=api
+```
+
+**Database locked:**
+```
+Error: SQLITE_BUSY: database is locked
+```
+**Solution:** 
+- Ensure no other processes are accessing the database file
+- WAL mode (enabled by default) reduces this issue
+- For development, delete `api/data/app.db` and restart
+
+**Missing dependencies:**
+```
+Error: Cannot find module 'express'
+```
+**Solution:** Install dependencies:
+```bash
+npm install --workspace=api
+```
 
 ### Database Initialization
 
