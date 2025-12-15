@@ -134,8 +134,8 @@ npm run db:init --workspace=api
 npm run db:migrate --workspace=api
 
 # Seed database only (requires tables to exist)
-# Note: Use db:init instead - the standalone db:seed command has a known issue
-# Run from the api directory:
+# Note: The npm run db:seed command has a module resolution issue.
+# Use this workaround instead (run from the api directory):
 cd api && npx tsx src/init-db.ts --seed
 ```
 
@@ -415,15 +415,24 @@ For production deployments, consider adding:
 
 ### CORS Configuration
 
-CORS is configured to allow requests from the frontend:
+CORS is configured to allow requests from the frontend. By default, the following origins are allowed:
 
 ```typescript
-// Configurable via API_CORS_ORIGINS environment variable
 const corsOrigins = [
   'http://localhost:5137',  // Frontend dev server
   'http://localhost:3001',
   /^https:\/\/.*\.app\.github\.dev$/,  // GitHub Codespaces
 ];
+```
+
+**To customize allowed origins**, set the `API_CORS_ORIGINS` environment variable:
+
+```bash
+# Allow specific origins (comma-separated)
+API_CORS_ORIGINS=http://localhost:3000,https://example.com npm run dev
+
+# In a .env file:
+API_CORS_ORIGINS=http://localhost:3000,https://example.com,https://app.mysite.com
 ```
 
 ## Error Handling
