@@ -135,7 +135,8 @@ npm run db:migrate --workspace=api
 
 # Seed database only (requires tables to exist)
 # Note: Use db:init instead - the standalone db:seed command has a known issue
-npx tsx src/init-db.ts --seed --workspace=api
+# Run from the api directory:
+cd api && npx tsx src/init-db.ts --seed
 ```
 
 ### Accessing API Documentation
@@ -775,8 +776,7 @@ Update Swagger annotations and this documentation if the entity introduces new p
 
 **Database:**
 - Use **snake_case** for table and column names: `entity_id`, `created_at`
-- Use **singular** table names: `supplier`, `product` (not `suppliers`, `products`)
-- Note: The codebase currently uses plural table names (e.g., `suppliers`). For consistency, follow the existing pattern in the codebase.
+- Use **plural** table names: `suppliers`, `products` (following the existing codebase convention)
 
 **Files:**
 - Use **camelCase** for TypeScript files: `entitiesRepo.ts`, `supplier.ts`
