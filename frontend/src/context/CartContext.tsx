@@ -26,8 +26,13 @@ const CART_STORAGE_KEY = 'octocat-supply-cart';
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>(() => {
     // Load cart from localStorage on init
-    const saved = localStorage.getItem(CART_STORAGE_KEY);
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem(CART_STORAGE_KEY);
+      return saved ? JSON.parse(saved) : [];
+    } catch (error) {
+      console.error('Failed to parse cart from localStorage:', error);
+      return [];
+    }
   });
 
   // Save cart to localStorage whenever it changes

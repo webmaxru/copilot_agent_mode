@@ -167,7 +167,7 @@ export default function Cart() {
                               min="1"
                               value={item.quantity}
                               onChange={(e) =>
-                                handleQuantityChange(item.productId, parseInt(e.target.value) || 1)
+                                handleQuantityChange(item.productId, parseInt(e.target.value, 10) || 1)
                               }
                               className={`w-20 px-3 py-2 border rounded-lg ${darkMode ? 'bg-gray-900 text-light border-gray-700' : 'bg-white text-gray-800 border-gray-300'} focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors duration-300`}
                               aria-label={`Quantity of ${item.name}`}
@@ -219,22 +219,12 @@ export default function Cart() {
                     className={`flex-1 max-w-xs px-4 py-2 border rounded-lg ${darkMode ? 'bg-gray-900 text-light border-gray-700' : 'bg-white text-gray-800 border-gray-300'} focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors duration-300`}
                     aria-label="Coupon code"
                   />
-                  <div className="flex gap-3 w-full sm:w-auto">
-                    <button
-                      onClick={handleApplyCoupon}
-                      className="flex-1 sm:flex-none px-6 py-2 bg-primary hover:bg-accent text-white font-semibold rounded-lg transition-colors"
-                    >
-                      Apply Coupon
-                    </button>
-                    <button
-                      onClick={() => {
-                        /* TODO: Update cart logic */
-                      }}
-                      className="flex-1 sm:flex-none px-6 py-2 bg-primary hover:bg-accent text-white font-semibold rounded-lg transition-colors"
-                    >
-                      Update Cart
-                    </button>
-                  </div>
+                  <button
+                    onClick={handleApplyCoupon}
+                    className="w-full sm:w-auto px-6 py-2 bg-primary hover:bg-accent text-white font-semibold rounded-lg transition-colors"
+                  >
+                    Apply Coupon
+                  </button>
                 </div>
               </div>
             </div>
@@ -265,7 +255,7 @@ export default function Cart() {
 
                 <div className="flex justify-between items-center">
                   <span className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Discount(5%)
+                    Discount (5%)
                   </span>
                   <span
                     className={`font-semibold ${darkMode ? 'text-light' : 'text-gray-800'}`}
