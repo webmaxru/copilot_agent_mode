@@ -105,6 +105,8 @@ To showcase extended capabilities:
 - [Detailed Architecture](./docs/architecture.md)
 - [SQLite Integration](./docs/sqlite-integration.md)
 - [Complete Demo Script](./docs/demo-script.md)
+- **[API Documentation](./api/README.md)** - Comprehensive API reference with examples
+- [API Quick Reference](./api/QUICK_REFERENCE.md) - Concise API cheat sheet
 
 Database defaults and env vars:
 - DB file: `api/data/app.db` (override with `DB_FILE=/absolute/path/to/file.db`)

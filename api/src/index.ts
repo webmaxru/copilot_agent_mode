@@ -42,9 +42,9 @@ const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Express API with Swagger',
+      title: 'OctoCAT Supply Chain Management API',
       version: '1.0.0',
-      description: 'REST API documentation using Swagger/OpenAPI',
+      description: 'REST API for managing suppliers, headquarters, branches, products, orders, and deliveries. Full CRUD operations with SQLite persistence.',
     },
     servers: [
       {
