@@ -193,6 +193,8 @@ React Query manages server state (fetching, caching, synchronization) with minim
 npm install react-query
 ```
 
+**Current Version:** This project uses React Query v3. For newer projects, consider React Query v4+ (renamed to @tanstack/react-query) which uses object-based API syntax.
+
 ### Setup
 
 **No setup required** - React Query is used directly in components without a provider in the current implementation.
@@ -205,6 +207,7 @@ import axios from 'axios';
 import { api } from '../api/config';
 
 function Products() {
+  // React Query v3 syntax (current)
   const { data, isLoading, error } = useQuery('products', async () => {
     const response = await axios.get(`${api.baseURL}${api.endpoints.products}`);
     return response.data;
@@ -330,11 +333,18 @@ try {
 } catch (error) {
   if (axios.isAxiosError(error)) {
     if (error.response?.status === 404) {
-      alert('Product not found');
+      // Display user-friendly error in UI
+      setErrorMessage('Product not found');
     } else if (error.response?.status === 500) {
-      alert('Server error. Please try again later.');
+      // Display user-friendly error in UI
+      setErrorMessage('Server error. Please try again later.');
     } else {
-      alert('An error occurred');
+      // Display generic error in UI
+      setErrorMessage('An error occurred');
+    }
+    // Log error for debugging (in development only)
+    if (import.meta.env.DEV) {
+      console.error('API Error:', error);
     }
   }
 }

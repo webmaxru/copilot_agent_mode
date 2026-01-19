@@ -311,7 +311,14 @@ const [showModal, setShowModal] = useState(false);
 Uses React Query for data fetching:
 
 ```typescript
+// React Query v3 syntax (current version in this project)
 const { data: products, isLoading, error } = useQuery('products', fetchProducts);
+
+// Note: For React Query v4+, use object syntax:
+// const { data, isLoading, error } = useQuery({
+//   queryKey: ['products'],
+//   queryFn: fetchProducts
+// });
 ```
 
 **Key Functions:**

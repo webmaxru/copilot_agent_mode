@@ -426,7 +426,7 @@ import Products from './Products';
 
 // Mock axios
 vi.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
+const mockedAxios = vi.mocked(axios);
 
 describe('Products', () => {
   const queryClient = new QueryClient({
