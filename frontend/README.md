@@ -1,54 +1,135 @@
-# React + TypeScript + Vite
+# OctoCAT Supply Chain Management - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Modern React-based frontend for the OctoCAT Supply Chain Management System.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A single-page application (SPA) built with React, TypeScript, Vite, and Tailwind CSS that provides an intuitive interface for managing supply chain operations including products, orders, suppliers, and more.
 
-## Expanding the ESLint configuration
+## Key Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 🎨 **Dark/Light Theme** - User-switchable theme with localStorage persistence
+- 🔐 **Authentication** - Role-based access control (admin/regular users)
+- 📱 **Responsive Design** - Mobile-first approach with Tailwind CSS
+- ⚡ **Fast Development** - Vite HMR for instant feedback
+- 🎯 **Type-Safe** - Full TypeScript coverage
+- 🌐 **API Integration** - RESTful API communication with React Query
+- ♿ **Accessible** - ARIA labels and keyboard navigation support
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Tech Stack
+
+- **React 18+** - UI library
+- **TypeScript** - Type-safe JavaScript
+- **Vite** - Build tool and dev server
+- **Tailwind CSS** - Utility-first CSS framework
+- **React Router v7** - Client-side routing
+- **React Query** - Server state management
+- **Axios** - HTTP client
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js 18+ and npm 9+
+
+### Installation
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Access at http://localhost:5137
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Build for Production
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+npm run build
 ```
+
+### Linting
+
+```bash
+npm run lint
+```
+
+## Project Structure
+
+```
+src/
+├── api/              # API configuration and endpoints
+├── components/       # React components
+│   ├── admin/       # Admin-specific components
+│   ├── entity/      # Domain entity components
+│   └── ...          # Layout and page components
+├── context/         # React Context providers (Auth, Theme)
+├── assets/          # Images and static assets
+├── App.tsx          # Root component with routing
+└── main.tsx         # Application entry point
+```
+
+## Documentation
+
+Comprehensive documentation is available in the `docs/frontend/` directory:
+
+- **[Overview & Getting Started](../docs/frontend/README.md)** - Introduction and quick start
+- **[Architecture](../docs/frontend/architecture.md)** - Component structure, state management, routing patterns
+- **[Setup & Development](../docs/frontend/setup.md)** - Prerequisites, environment setup, development workflow
+- **[Component Documentation](../docs/frontend/components.md)** - Detailed component API and usage examples
+- **[Styling Guidelines](../docs/frontend/styling.md)** - Tailwind CSS conventions and theme system
+- **[API Integration](../docs/frontend/api-integration.md)** - API client, error handling, authentication
+- **[Testing](../docs/frontend/testing.md)** - Testing strategy, tools, and examples
+- **[Code Organization](../docs/frontend/code-organization.md)** - Folder structure and best practices
+
+## Available Routes
+
+- `/` - Welcome/landing page
+- `/about` - About page
+- `/products` - Product catalog
+- `/login` - User login
+- `/admin/products` - Admin product management (requires admin access)
+
+## Environment Configuration
+
+The application automatically detects the API URL:
+
+1. **Runtime Config** - `window.RUNTIME_CONFIG.API_URL` (Docker/production)
+2. **GitHub Codespaces** - Auto-detected and configured
+3. **Local Development** - Defaults to `http://localhost:3000`
+
+See [Setup Documentation](../docs/frontend/setup.md#environment-configuration) for details.
+
+## Development Scripts
+
+```bash
+npm run dev      # Start dev server (http://localhost:5137)
+npm run build    # Build for production
+npm run lint     # Run ESLint
+npm run preview  # Preview production build
+```
+
+## Contributing
+
+When adding new features:
+
+1. Follow [Code Organization](../docs/frontend/code-organization.md) patterns
+2. Adhere to [Styling Guidelines](../docs/frontend/styling.md)
+3. Add tests (see [Testing Guide](../docs/frontend/testing.md))
+4. Update relevant documentation
+
+## Architecture
+
+This frontend communicates with a REST API backend. See the [main architecture documentation](../docs/architecture.md) for system-wide design and [frontend architecture](../docs/frontend/architecture.md) for detailed frontend patterns.
+
+## Support
+
+- Check the [documentation](../docs/frontend/README.md)
+- Review [setup troubleshooting](../docs/frontend/setup.md#troubleshooting)
+- See component examples in the codebase
+
+## License
+
+Part of the OctoCAT Supply Chain Management System.
