@@ -5,6 +5,9 @@ import { useState } from 'react';
 import axios from 'axios';
 import { api } from '../../../api/config';
 
+// Demo: using first branch for all orders
+const DEFAULT_BRANCH_ID = 1;
+
 export default function Cart() {
   const { cart, updateQuantity, removeFromCart, clearCart } = useCart();
   const { darkMode } = useTheme();
@@ -28,7 +31,7 @@ export default function Cart() {
     try {
       // Create order with first branch (demo purposes)
       const orderResponse = await axios.post(`${api.baseURL}${api.endpoints.orders}`, {
-        branchId: 1,
+        branchId: DEFAULT_BRANCH_ID,
         orderDate: new Date().toISOString(),
         name: `Order ${new Date().toLocaleDateString()}`,
         description: 'Shopping cart order',

@@ -24,8 +24,13 @@ const calculateTotals = (items: CartItem[]): { totalItems: number; totalPrice: n
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>(() => {
-    const stored = localStorage.getItem(CART_STORAGE_KEY);
-    return stored ? JSON.parse(stored) : [];
+    try {
+      const stored = localStorage.getItem(CART_STORAGE_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch (error) {
+      console.error('Failed to parse cart data from localStorage:', error);
+      return [];
+    }
   });
 
   useEffect(() => {
