@@ -133,7 +133,7 @@ export class BranchesRepository {
     try {
       const sanitizedName = sanitizeSearchQuery(name);
       const rows = await this.db.all<any>(
-        'SELECT * FROM branches WHERE name LIKE ? ESCAPE \'\\\' ORDER BY name',
+        "SELECT * FROM branches WHERE name LIKE ? ESCAPE '\\' ORDER BY name",
         [`%${sanitizedName}%`],
       );
       return rows.map((row) => objectToCamelCase(row) as Branch);

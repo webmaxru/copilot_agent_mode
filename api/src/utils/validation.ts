@@ -105,8 +105,11 @@ export function validateEnum<T extends string>(
 
 /**
  * Sanitize search query to prevent SQL injection in LIKE clauses
+ * Note: This should ONLY be used with parameterized queries.
+ * The parameterized query prevents SQL injection, this just escapes wildcards
+ * to prevent unintended LIKE pattern matching.
  */
 export function sanitizeSearchQuery(query: string): string {
-  // Remove SQL wildcards and special characters that could be used for injection
-  return query.replace(/[%_]/g, '\\$&').trim();
+  // Escape SQL LIKE wildcards (% and _) using backslash
+  return query.replace(/[%_\\]/g, '\\$&').trim();
 }
