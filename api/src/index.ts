@@ -2,6 +2,8 @@ import express from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import deliveryRoutes from './routes/delivery';
 import orderDetailDeliveryRoutes from './routes/orderDetailDelivery';
 import productRoutes from './routes/product';
@@ -15,6 +17,31 @@ import { errorHandler } from './utils/errors';
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Security: Add Helmet middleware for security headers
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+      },
+    },
+    crossOriginEmbedderPolicy: false, // Allow embedding for Swagger UI
+  }),
+);
+
+// Security: Add rate limiting to prevent DoS attacks
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use('/api', limiter);
 
 // Parse CORS origins from environment variable if available
 const corsOrigins = process.env.API_CORS_ORIGINS
