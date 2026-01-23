@@ -6,6 +6,7 @@ import { getDatabase, DatabaseConnection } from '../db/sqlite';
 import { Branch } from '../models/branch';
 import { handleDatabaseError, NotFoundError } from '../utils/errors';
 import { buildInsertSQL, buildUpdateSQL, objectToCamelCase } from '../utils/sql';
+import { sanitizeSearchQuery } from '../utils/validation';
 
 export class BranchesRepository {
   private db: DatabaseConnection;
@@ -130,9 +131,10 @@ export class BranchesRepository {
    */
   async findByName(name: string): Promise<Branch[]> {
     try {
+      const sanitizedName = sanitizeSearchQuery(name);
       const rows = await this.db.all<any>(
-        'SELECT * FROM branches WHERE name LIKE ? ORDER BY name',
-        [`%${name}%`],
+        'SELECT * FROM branches WHERE name LIKE ? ESCAPE \'\\\' ORDER BY name',
+        [`%${sanitizedName}%`],
       );
       return rows.map((row) => objectToCamelCase(row) as Branch);
     } catch (error) {

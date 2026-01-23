@@ -103,6 +103,7 @@ import express from 'express';
 import { Order } from '../models/order';
 import { getOrdersRepository } from '../repositories/ordersRepo';
 import { handleDatabaseError, NotFoundError } from '../utils/errors';
+import { validatePositiveInteger } from '../utils/validation';
 
 const router = express.Router();
 
@@ -131,8 +132,9 @@ router.get('/', async (req, res, next) => {
 // Get an order by ID
 router.get('/:id', async (req, res, next) => {
   try {
+    const id = validatePositiveInteger(req.params.id, 'Order ID');
     const repo = await getOrdersRepository();
-    const order = await repo.findById(parseInt(req.params.id));
+    const order = await repo.findById(id);
     if (order) {
       res.json(order);
     } else {
@@ -146,8 +148,9 @@ router.get('/:id', async (req, res, next) => {
 // Update an order by ID
 router.put('/:id', async (req, res, next) => {
   try {
+    const id = validatePositiveInteger(req.params.id, 'Order ID');
     const repo = await getOrdersRepository();
-    const updatedOrder = await repo.update(parseInt(req.params.id), req.body);
+    const updatedOrder = await repo.update(id, req.body);
     res.json(updatedOrder);
   } catch (error) {
     if (error instanceof NotFoundError) {
@@ -161,8 +164,9 @@ router.put('/:id', async (req, res, next) => {
 // Delete an order by ID
 router.delete('/:id', async (req, res, next) => {
   try {
+    const id = validatePositiveInteger(req.params.id, 'Order ID');
     const repo = await getOrdersRepository();
-    await repo.delete(parseInt(req.params.id));
+    await repo.delete(id);
     res.status(204).send();
   } catch (error) {
     if (error instanceof NotFoundError) {

@@ -73,6 +73,9 @@ export function handleDatabaseError(error: any, entity?: string, id?: string | n
  * Express error handler middleware for database errors
  */
 export function errorHandler(error: any, req: any, res: any, next: any) {
+  // Log error for debugging (in production, use proper logging service)
+  console.error('Error:', error.message);
+
   if (error instanceof DatabaseError) {
     return res.status(error.statusCode).json({
       error: {
@@ -82,11 +85,13 @@ export function errorHandler(error: any, req: any, res: any, next: any) {
     });
   }
 
-  // Default error handling
+  // Default error handling - don't leak internal error details in production
+  const isDevelopment = process.env.NODE_ENV !== 'production';
   return res.status(500).json({
     error: {
       code: 'INTERNAL_ERROR',
       message: 'An unexpected error occurred',
+      ...(isDevelopment && { details: error.message }), // Only show details in development
     },
   });
 }
