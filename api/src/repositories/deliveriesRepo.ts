@@ -4,110 +4,17 @@
 
 import { getDatabase, DatabaseConnection } from '../db/sqlite';
 import { Delivery } from '../models/delivery';
-import { handleDatabaseError, NotFoundError } from '../utils/errors';
-import { buildInsertSQL, buildUpdateSQL, objectToCamelCase } from '../utils/sql';
+import { handleDatabaseError } from '../utils/errors';
+import { objectToCamelCase } from '../utils/sql';
+import { BaseRepository } from './BaseRepository';
 
-export class DeliveriesRepository {
-  private db: DatabaseConnection;
-
+export class DeliveriesRepository extends BaseRepository<Delivery> {
   constructor(db: DatabaseConnection) {
-    this.db = db;
-  }
-
-  /**
-   * Get all deliveries
-   */
-  async findAll(): Promise<Delivery[]> {
-    try {
-      const rows = await this.db.all<any>('SELECT * FROM deliveries ORDER BY delivery_id');
-      return rows.map((row) => objectToCamelCase(row) as Delivery);
-    } catch (error) {
-      handleDatabaseError(error);
-    }
-  }
-
-  /**
-   * Get delivery by ID
-   */
-  async findById(id: number): Promise<Delivery | null> {
-    try {
-      const row = await this.db.get<any>('SELECT * FROM deliveries WHERE delivery_id = ?', [id]);
-      return row ? (objectToCamelCase(row) as Delivery) : null;
-    } catch (error) {
-      handleDatabaseError(error);
-    }
-  }
-
-  /**
-   * Create a new delivery
-   */
-  async create(delivery: Omit<Delivery, 'deliveryId'>): Promise<Delivery> {
-    try {
-      const { sql, values } = buildInsertSQL('deliveries', delivery);
-      const result = await this.db.run(sql, values);
-
-      const createdDelivery = await this.findById(result.lastID!);
-      if (!createdDelivery) {
-        throw new Error('Failed to retrieve created delivery');
-      }
-
-      return createdDelivery;
-    } catch (error) {
-      handleDatabaseError(error);
-    }
-  }
-
-  /**
-   * Update delivery by ID
-   */
-  async update(id: number, delivery: Partial<Omit<Delivery, 'deliveryId'>>): Promise<Delivery> {
-    try {
-      const { sql, values } = buildUpdateSQL('deliveries', delivery, 'delivery_id = ?');
-      const result = await this.db.run(sql, [...values, id]);
-
-      if (result.changes === 0) {
-        throw new NotFoundError('Delivery', id);
-      }
-
-      const updatedDelivery = await this.findById(id);
-      if (!updatedDelivery) {
-        throw new Error('Failed to retrieve updated delivery');
-      }
-
-      return updatedDelivery;
-    } catch (error) {
-      handleDatabaseError(error, 'Delivery', id);
-    }
-  }
-
-  /**
-   * Delete delivery by ID
-   */
-  async delete(id: number): Promise<void> {
-    try {
-      const result = await this.db.run('DELETE FROM deliveries WHERE delivery_id = ?', [id]);
-
-      if (result.changes === 0) {
-        throw new NotFoundError('Delivery', id);
-      }
-    } catch (error) {
-      handleDatabaseError(error, 'Delivery', id);
-    }
-  }
-
-  /**
-   * Check if delivery exists
-   */
-  async exists(id: number): Promise<boolean> {
-    try {
-      const result = await this.db.get<{ count: number }>(
-        'SELECT COUNT(*) as count FROM deliveries WHERE delivery_id = ?',
-        [id],
-      );
-      return (result?.count || 0) > 0;
-    } catch (error) {
-      handleDatabaseError(error);
-    }
+    super(db, {
+      tableName: 'deliveries',
+      idField: 'delivery_id',
+      entityName: 'Delivery',
+    });
   }
 
   /**
