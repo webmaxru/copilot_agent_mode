@@ -100,50 +100,17 @@
  */
 
 import express from 'express';
-import { Product } from '../models/product';
 import { getProductsRepository } from '../repositories/productsRepo';
-import { handleDatabaseError, NotFoundError } from '../utils/errors';
+import { createCrudRouter } from '../utils/createCrudRouter';
 
-const router = express.Router();
-
-// Create a new product
-router.post('/', async (req, res, next) => {
-  try {
-    const repo = await getProductsRepository();
-    const newProduct = await repo.create(req.body as Omit<Product, 'productId'>);
-    res.status(201).json(newProduct);
-  } catch (error) {
-    next(error);
-  }
+const router = createCrudRouter({
+  getRepository: getProductsRepository,
+  entityName: 'Product',
+  entityNamePlural: 'Products',
+  schemaName: 'Product',
 });
 
-// Get all products
-router.get('/', async (req, res, next) => {
-  try {
-    const repo = await getProductsRepository();
-    const products = await repo.findAll();
-    res.json(products);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Get a product by ID
-router.get('/:id', async (req, res, next) => {
-  try {
-    const repo = await getProductsRepository();
-    const product = await repo.findById(parseInt(req.params.id));
-    if (product) {
-      res.json(product);
-    } else {
-      res.status(404).send('Product not found');
-    }
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Get a product by name
+// Custom route: Get a product by name
 router.get('/name/:name', async (req, res, next) => {
   try {
     const repo = await getProductsRepository();
@@ -155,36 +122,6 @@ router.get('/name/:name', async (req, res, next) => {
     }
   } catch (error) {
     next(error);
-  }
-});
-
-// Update a product by ID
-router.put('/:id', async (req, res, next) => {
-  try {
-    const repo = await getProductsRepository();
-    const updatedProduct = await repo.update(parseInt(req.params.id), req.body);
-    res.json(updatedProduct);
-  } catch (error) {
-    if (error instanceof NotFoundError) {
-      res.status(404).send('Product not found');
-    } else {
-      next(error);
-    }
-  }
-});
-
-// Delete a product by ID
-router.delete('/:id', async (req, res, next) => {
-  try {
-    const repo = await getProductsRepository();
-    await repo.delete(parseInt(req.params.id));
-    res.status(204).send();
-  } catch (error) {
-    if (error instanceof NotFoundError) {
-      res.status(404).send('Product not found');
-    } else {
-      next(error);
-    }
   }
 });
 
