@@ -5,27 +5,10 @@ import { Navigate } from 'react-router-dom';
 import ProductForm from '../entity/product/ProductForm';
 import axios from 'axios';
 import { api } from '../../api/config';
+import { Product, Supplier } from '../../types/models';
 
-interface Supplier {
-  supplierId: number;
-  name: string;
-  description: string;
-  contactPerson: string;
-  email: string;
-  phone: string;
-}
-
-interface Product {
-  productId: number;
-  supplierId: number;
-  name: string;
-  description: string;
-  price: number;
-  sku: string;
-  unit: string;
-  imgName: string;
+interface ProductWithSupplier extends Product {
   supplier?: Supplier;
-  discount?: number;
 }
 
 type SortField = 'name' | 'price' | 'sku' | 'unit' | 'supplier';
@@ -34,9 +17,9 @@ type SortOrder = 'asc' | 'desc';
 export default function AdminProducts() {
   const { isAdmin } = useAuth();
   const { darkMode } = useTheme();
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductWithSupplier[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const [editingProduct, setEditingProduct] = useState<Product | undefined>(undefined);
+  const [editingProduct, setEditingProduct] = useState<ProductWithSupplier | undefined>(undefined);
   const [showForm, setShowForm] = useState(false);
   const [sortField, setSortField] = useState<SortField>('name');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');

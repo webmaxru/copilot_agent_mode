@@ -4,127 +4,17 @@
 
 import { getDatabase, DatabaseConnection } from '../db/sqlite';
 import { OrderDetailDelivery } from '../models/orderDetailDelivery';
-import { handleDatabaseError, NotFoundError } from '../utils/errors';
-import { buildInsertSQL, buildUpdateSQL, objectToCamelCase } from '../utils/sql';
+import { handleDatabaseError } from '../utils/errors';
+import { objectToCamelCase } from '../utils/sql';
+import { BaseRepository } from './BaseRepository';
 
-export class OrderDetailDeliveriesRepository {
-  private db: DatabaseConnection;
-
+export class OrderDetailDeliveriesRepository extends BaseRepository<OrderDetailDelivery> {
   constructor(db: DatabaseConnection) {
-    this.db = db;
-  }
-
-  /**
-   * Get all order detail deliveries
-   */
-  async findAll(): Promise<OrderDetailDelivery[]> {
-    try {
-      const rows = await this.db.all<any>(
-        'SELECT * FROM order_detail_deliveries ORDER BY order_detail_delivery_id',
-      );
-      return rows.map((row) => objectToCamelCase(row) as OrderDetailDelivery);
-    } catch (error) {
-      handleDatabaseError(error);
-    }
-  }
-
-  /**
-   * Get order detail delivery by ID
-   */
-  async findById(id: number): Promise<OrderDetailDelivery | null> {
-    try {
-      const row = await this.db.get<any>(
-        'SELECT * FROM order_detail_deliveries WHERE order_detail_delivery_id = ?',
-        [id],
-      );
-      return row ? (objectToCamelCase(row) as OrderDetailDelivery) : null;
-    } catch (error) {
-      handleDatabaseError(error);
-    }
-  }
-
-  /**
-   * Create a new order detail delivery
-   */
-  async create(
-    orderDetailDelivery: Omit<OrderDetailDelivery, 'orderDetailDeliveryId'>,
-  ): Promise<OrderDetailDelivery> {
-    try {
-      const { sql, values } = buildInsertSQL('order_detail_deliveries', orderDetailDelivery);
-      const result = await this.db.run(sql, values);
-
-      const createdOrderDetailDelivery = await this.findById(result.lastID!);
-      if (!createdOrderDetailDelivery) {
-        throw new Error('Failed to retrieve created order detail delivery');
-      }
-
-      return createdOrderDetailDelivery;
-    } catch (error) {
-      handleDatabaseError(error);
-    }
-  }
-
-  /**
-   * Update order detail delivery by ID
-   */
-  async update(
-    id: number,
-    orderDetailDelivery: Partial<Omit<OrderDetailDelivery, 'orderDetailDeliveryId'>>,
-  ): Promise<OrderDetailDelivery> {
-    try {
-      const { sql, values } = buildUpdateSQL(
-        'order_detail_deliveries',
-        orderDetailDelivery,
-        'order_detail_delivery_id = ?',
-      );
-      const result = await this.db.run(sql, [...values, id]);
-
-      if (result.changes === 0) {
-        throw new NotFoundError('OrderDetailDelivery', id);
-      }
-
-      const updatedOrderDetailDelivery = await this.findById(id);
-      if (!updatedOrderDetailDelivery) {
-        throw new Error('Failed to retrieve updated order detail delivery');
-      }
-
-      return updatedOrderDetailDelivery;
-    } catch (error) {
-      handleDatabaseError(error, 'OrderDetailDelivery', id);
-    }
-  }
-
-  /**
-   * Delete order detail delivery by ID
-   */
-  async delete(id: number): Promise<void> {
-    try {
-      const result = await this.db.run(
-        'DELETE FROM order_detail_deliveries WHERE order_detail_delivery_id = ?',
-        [id],
-      );
-
-      if (result.changes === 0) {
-        throw new NotFoundError('OrderDetailDelivery', id);
-      }
-    } catch (error) {
-      handleDatabaseError(error, 'OrderDetailDelivery', id);
-    }
-  }
-
-  /**
-   * Check if order detail delivery exists
-   */
-  async exists(id: number): Promise<boolean> {
-    try {
-      const result = await this.db.get<{ count: number }>(
-        'SELECT COUNT(*) as count FROM order_detail_deliveries WHERE order_detail_delivery_id = ?',
-        [id],
-      );
-      return (result?.count || 0) > 0;
-    } catch (error) {
-      handleDatabaseError(error);
-    }
+    super(db, {
+      tableName: 'order_detail_deliveries',
+      idField: 'order_detail_delivery_id',
+      entityName: 'OrderDetailDelivery',
+    });
   }
 
   /**

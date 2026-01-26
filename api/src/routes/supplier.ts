@@ -99,78 +99,14 @@
  *         description: Supplier not found
  */
 
-import express from 'express';
-import { Supplier } from '../models/supplier';
 import { getSuppliersRepository } from '../repositories/suppliersRepo';
-import { handleDatabaseError, NotFoundError } from '../utils/errors';
+import { createCrudRouter } from '../utils/createCrudRouter';
 
-const router = express.Router();
-
-// Create a new supplier
-router.post('/', async (req, res, next) => {
-  try {
-    const repo = await getSuppliersRepository();
-    const newSupplier = await repo.create(req.body as Omit<Supplier, 'supplierId'>);
-    res.status(201).json(newSupplier);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Get all suppliers
-router.get('/', async (req, res, next) => {
-  try {
-    const repo = await getSuppliersRepository();
-    const suppliers = await repo.findAll();
-    res.json(suppliers);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Get a supplier by ID
-router.get('/:id', async (req, res, next) => {
-  try {
-    const repo = await getSuppliersRepository();
-    const supplier = await repo.findById(parseInt(req.params.id));
-    if (supplier) {
-      res.json(supplier);
-    } else {
-      res.status(404).send('Supplier not found');
-    }
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Update a supplier by ID
-router.put('/:id', async (req, res, next) => {
-  try {
-    const repo = await getSuppliersRepository();
-    const updatedSupplier = await repo.update(parseInt(req.params.id), req.body);
-    res.json(updatedSupplier);
-  } catch (error) {
-    if (error instanceof NotFoundError) {
-      res.status(404).send('Supplier not found');
-    } else {
-      next(error);
-    }
-  }
-});
-
-// Delete a supplier by ID
-router.delete('/:id', async (req, res, next) => {
-  try {
-    const repo = await getSuppliersRepository();
-    await repo.delete(parseInt(req.params.id));
-    res.status(204).send();
-  } catch (error) {
-    if (error instanceof NotFoundError) {
-      res.status(404).send('Supplier not found');
-    } else {
-      next(error);
-    }
-  }
+const router = createCrudRouter({
+  getRepository: getSuppliersRepository,
+  entityName: 'Supplier',
+  entityNamePlural: 'Suppliers',
+  schemaName: 'Supplier',
 });
 
 export default router;

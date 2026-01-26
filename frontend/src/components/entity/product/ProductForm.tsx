@@ -2,23 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { api } from '../../../api/config';
 import { useTheme } from '../../../context/ThemeContext';
-
-interface Supplier {
-  supplierId: number;
-  name: string;
-}
-
-interface Product {
-  productId: number;
-  supplierId: number;
-  name: string;
-  description: string;
-  price: number;
-  sku: string;
-  unit: string;
-  imgName: string;
-  discount?: number;
-}
+import { Product, Supplier } from '../../../types/models';
 
 interface ProductFormProps {
   product?: Product;
