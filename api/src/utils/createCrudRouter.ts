@@ -9,7 +9,7 @@ import express, { Router } from 'express';
 import { BaseRepository } from '../repositories/BaseRepository';
 import { NotFoundError } from './errors';
 
-export interface CrudRouterConfig<T> {
+export interface CrudRouterConfig<T extends { [key: string]: any }> {
   /** Function that returns the repository instance */
   getRepository: () => Promise<BaseRepository<T>>;
   /** Entity name for error messages (e.g., 'Product', 'Branch') */

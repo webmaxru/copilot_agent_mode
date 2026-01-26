@@ -62,7 +62,7 @@ export abstract class BaseRepository<T extends { [key: string]: any }> {
   /**
    * Create a new entity
    */
-  async create(entity: Omit<T, keyof { [K in keyof T]: T[K] extends number ? K : never }[keyof T]>): Promise<T> {
+  async create(entity: any): Promise<T> {
     try {
       const { sql, values } = buildInsertSQL(this.config.tableName, entity);
       const result = await this.db.run(sql, values);
@@ -81,7 +81,7 @@ export abstract class BaseRepository<T extends { [key: string]: any }> {
   /**
    * Update entity by ID
    */
-  async update(id: number, entity: Partial<Omit<T, keyof { [K in keyof T]: T[K] extends number ? K : never }[keyof T]>>): Promise<T> {
+  async update(id: number, entity: any): Promise<T> {
     try {
       const { sql, values } = buildUpdateSQL(
         this.config.tableName,
