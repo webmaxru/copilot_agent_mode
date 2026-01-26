@@ -38,7 +38,8 @@ export class ProductsRepository extends BaseRepository<Product> {
   async findByName(name: string): Promise<Product[]> {
     try {
       const rows = await this.db.all<any>(
-        `SELECT * FROM products WHERE name LIKE '%${name}%' ORDER BY name`,
+        'SELECT * FROM products WHERE name LIKE ? ORDER BY name',
+        [`%${name}%`],
       );
       return rows.map((row) => objectToCamelCase(row) as Product);
     } catch (error) {

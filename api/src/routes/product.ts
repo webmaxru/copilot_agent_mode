@@ -110,16 +110,12 @@ const router = createCrudRouter({
   schemaName: 'Product',
 });
 
-// Custom route: Get a product by name
+// Custom route: Find products by name (partial match)
 router.get('/name/:name', async (req, res, next) => {
   try {
     const repo = await getProductsRepository();
-    const product = await repo.findByName(req.params.name);
-    if (product) {
-      res.json(product);
-    } else {
-      res.status(404).send('Product not found');
-    }
+    const products = await repo.findByName(req.params.name);
+    res.json(products);
   } catch (error) {
     next(error);
   }
