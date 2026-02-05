@@ -11,7 +11,7 @@ The OctoCAT Supply Chain frontend is a modern React application built with TypeS
 - **Vite** - Fast build tool with Hot Module Replacement (HMR)
 - **Tailwind CSS** - Utility-first CSS framework for responsive design
 - **React Router v7** - Client-side routing with data router patterns
-- **React Query v3** - Server state management and data fetching
+- **React Query v3** - Server state management and data fetching (note: v3 is used; consider upgrading to TanStack Query v4+ for new features)
 - **Axios** - HTTP client for API communication
 - **React Slick** - Carousel component for product displays
 
@@ -435,7 +435,7 @@ lsof -ti:5137 | xargs kill -9
 - [React Documentation](https://react.dev/)
 - [Vite Guide](https://vitejs.dev/guide/)
 - [Tailwind CSS](https://tailwindcss.com/docs)
-- [React Query](https://tanstack.com/query/v3/docs/react/overview)
+- [React Query v3](https://tanstack.com/query/v3/docs/react/overview) (Project uses v3.39.3)
 - [React Router](https://reactrouter.com/en/main)
 
 ### Internal Documentation

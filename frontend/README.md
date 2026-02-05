@@ -176,7 +176,7 @@ See [Frontend Instructions](../.github/instructions/frontend.instructions.md) fo
 - [React Documentation](https://react.dev/)
 - [Vite Guide](https://vitejs.dev/guide/)
 - [Tailwind CSS](https://tailwindcss.com/docs)
-- [React Query](https://tanstack.com/query/v3/)
+- [React Query v3](https://tanstack.com/query/v3/) (Project uses v3.39.3)
 - [React Router](https://reactrouter.com/)
 
 ---
