@@ -102,9 +102,23 @@ To showcase extended capabilities:
 
 ## 📚 Documentation
 
+### General Documentation
 - [Detailed Architecture](./docs/architecture.md)
 - [SQLite Integration](./docs/sqlite-integration.md)
 - [Complete Demo Script](./docs/demo-script.md)
+
+### API Documentation
+- [API Overview](./api/README.md) - Quick start, configuration, and architecture
+- [Database Schema](./api/docs/database.md) - Tables, migrations, and seed data
+- [Data Models](./api/docs/models.md) - TypeScript entity interfaces and relationships
+- [API Endpoints](./api/docs/endpoints.md) - Complete REST API reference
+- [Repository Pattern](./api/docs/repository-pattern.md) - Data access layer architecture
+- [Development Guide](./api/docs/development.md) - Setup, testing, and deployment
+
+### Interactive API Documentation
+When the API is running, visit:
+- **Swagger UI**: http://localhost:3000/api-docs
+- **OpenAPI JSON**: http://localhost:3000/api-docs.json
 
 Database defaults and env vars:
 - DB file: `api/data/app.db` (override with `DB_FILE=/absolute/path/to/file.db`)
