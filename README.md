@@ -103,6 +103,7 @@ To showcase extended capabilities:
 ## 📚 Documentation
 
 - [Detailed Architecture](./docs/architecture.md)
+- [Frontend Documentation](./docs/frontend.md)
 - [SQLite Integration](./docs/sqlite-integration.md)
 - [Complete Demo Script](./docs/demo-script.md)
 
