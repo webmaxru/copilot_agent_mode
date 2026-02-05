@@ -440,7 +440,7 @@ lsof -ti:5137 | xargs kill -9
 
 ### Internal Documentation
 - [Architecture Overview](./architecture.md)
-- [API Documentation](../api/README.md)
+- [SQLite Integration](./sqlite-integration.md)
 - [Demo Script](./demo-script.md)
 
 ## Contributing

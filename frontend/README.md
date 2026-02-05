@@ -181,4 +181,4 @@ See [Frontend Instructions](../.github/instructions/frontend.instructions.md) fo
 
 ---
 
-*For backend API documentation, see [API README](../api/README.md)*
+*For the API, see the API source code in the [api directory](../api/) and the [API Swagger documentation](../api/api-swagger.json)*
