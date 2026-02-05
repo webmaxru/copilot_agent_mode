@@ -19,6 +19,11 @@ The system is a modern supply chain management application built using TypeScrip
 - React 18+ with TypeScript
 - Vite build tool for fast development
 - Tailwind CSS for UI styling
+- React Query for server state management
+- React Router v7 for client-side routing
+- Context API for global state (authentication, theme)
+
+See the dedicated frontend guide: `docs/frontend.md`
 
 ### DevOps Integration
 - Docker/Docker Compose for containerization
