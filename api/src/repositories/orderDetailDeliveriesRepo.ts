@@ -187,8 +187,12 @@ let orderDetailDeliveriesRepo: OrderDetailDeliveriesRepository | null = null;
 export async function getOrderDetailDeliveriesRepository(
   isTest: boolean = false,
 ): Promise<OrderDetailDeliveriesRepository> {
+  const isTestEnv = isTest || process.env.NODE_ENV === 'test' || process.env.VITEST === 'true';
+  if (isTestEnv) {
+    return createOrderDetailDeliveriesRepository(true);
+  }
   if (!orderDetailDeliveriesRepo) {
-    orderDetailDeliveriesRepo = await createOrderDetailDeliveriesRepository(isTest);
+    orderDetailDeliveriesRepo = await createOrderDetailDeliveriesRepository(false);
   }
   return orderDetailDeliveriesRepo;
 }
