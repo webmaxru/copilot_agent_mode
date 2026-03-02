@@ -1,0 +1,13 @@
+Configured CORS origins: [
+  'http://localhost:5137',
+  'http://localhost:3001',
+  /^https:\/\/.*\.app\.github\.dev$/
+]
+🚀 Initializing database...
+🚀 Initializing database...
+🚀 Starting database migration...
+✅ No pending migrations. Database is up to date.
+✅ Database initialization complete!
+✅ Database initialized successfully
+Server is running on port 3000
+API documentation is available at http://localhost:3000/api-docs
