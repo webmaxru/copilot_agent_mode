@@ -4,7 +4,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useState } from 'react';
 
 export default function Navigation() {
-  const { isLoggedIn, isAdmin, logout } = useAuth();
+  const { isLoggedIn, isAdmin, currentUser, logout } = useAuth();
   const { darkMode, toggleTheme } = useTheme();
   const [adminMenuOpen, setAdminMenuOpen] = useState(false);
 
@@ -116,12 +116,13 @@ export default function Navigation() {
             </button>
             {isLoggedIn ? (
               <>
-                <span
-                  className={`${darkMode ? 'text-light' : 'text-gray-700'} text-sm transition-colors`}
+                <Link
+                  to="/account"
+                  className={`${darkMode ? 'text-light hover:text-primary' : 'text-gray-700 hover:text-primary'} text-sm transition-colors`}
                 >
                   {isAdmin && <span className="text-primary">(Admin) </span>}
-                  Welcome!
-                </span>
+                  {currentUser?.name ?? 'Account'}
+                </Link>
                 <button
                   onClick={logout}
                   className={`${darkMode ? 'text-light hover:text-primary' : 'text-gray-700 hover:text-primary'} px-3 py-2 rounded-md text-sm font-medium transition-colors`}

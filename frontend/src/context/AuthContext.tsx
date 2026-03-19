@@ -1,34 +1,67 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import axios from 'axios';
+import { API_BASE_URL, api } from '../api/config';
+
+export interface CurrentUser {
+  userId: number;
+  email: string;
+  name: string;
+  role: 'user' | 'admin';
+  createdAt: string;
+}
 
 interface AuthContextType {
   isLoggedIn: boolean;
   isAdmin: boolean;
+  currentUser: CurrentUser | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  updateCurrentUser: (updates: Partial<Pick<CurrentUser, 'name'>>) => void;
 }
+
+const AUTH_STORAGE_KEY = 'octocat_user';
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(() => {
+    try {
+      const stored = localStorage.getItem(AUTH_STORAGE_KEY);
+      return stored ? (JSON.parse(stored) as CurrentUser) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const isLoggedIn = currentUser !== null;
+  const isAdmin = currentUser?.role === 'admin';
+
+  useEffect(() => {
+    if (currentUser) {
+      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(currentUser));
+    } else {
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+    }
+  }, [currentUser]);
 
   const login = async (email: string, password: string) => {
-    // In a real app, you would validate credentials with an API
-    // For now, we'll just check the email domain
-    if (email && password) {
-      setIsLoggedIn(true);
-      setIsAdmin(email.endsWith('@github.com'));
-    }
+    const response = await axios.post<CurrentUser>(
+      `${API_BASE_URL}${api.endpoints.users}/login`,
+      { email, password },
+    );
+    setCurrentUser(response.data);
   };
 
   const logout = () => {
-    setIsLoggedIn(false);
-    setIsAdmin(false);
+    setCurrentUser(null);
+  };
+
+  const updateCurrentUser = (updates: Partial<Pick<CurrentUser, 'name'>>) => {
+    setCurrentUser((prev) => (prev ? { ...prev, ...updates } : prev));
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, isAdmin, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, isAdmin, currentUser, login, logout, updateCurrentUser }}>
       {children}
     </AuthContext.Provider>
   );
